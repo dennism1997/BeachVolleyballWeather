@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BeachVolleyballWeather</string>
+    <string name="temperatureLabel">temperature: %1$d °C</string>
+    <string name="precipLabel">Precip: %1$d </string>
+</resources>
