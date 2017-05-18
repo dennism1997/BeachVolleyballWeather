@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">BeachVolleyballWeather</string>
-    <string name="temperatureLabel">temperature: %1$d °C</string>
-    <string name="precipLabel">Precip: %1$d </string>
+    <string name="temperatureLabel">temperature: %1$s °C</string>
+    <string name="precipLabel">Precip: %1$s </string>
+    <string name="weatherUrl">https://api.darksky.net/forecast/3c6366cf207388e110d98eb55f634e53/</string>
+    <string name="defaultLatLong">52.370216,4.895168</string>
+    <string name="defaultQuery">\?units=si</string>
 </resources>
