@@ -143,7 +143,10 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
             val summary = data.getString("summary")
             val iconType: String = daily.getString("icon")
             when (iconType.trim()) {
-                "rain" -> weatherIconView.setIconResource(getString(R.string.wi_rain))
+                "rain" -> {
+                    weatherIconView.setIconResource(getString(R.string.wi_rain))
+                    weatherIconView.setIconColor(R.color.md_blue_500)
+                }
                 "clear-day" -> weatherIconView.setIconResource(getString(R.string.wi_day_sunny))
                 "snow" -> weatherIconView.setIconResource(getString(R.string.wi_snow))
                 "partly-cloudy-day" -> weatherIconView.setIconResource(getString(R.string.wi_day_cloudy))
