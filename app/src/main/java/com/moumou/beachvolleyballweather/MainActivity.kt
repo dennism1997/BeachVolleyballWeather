@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -70,7 +72,6 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
                 fragmentManager.beginTransaction().replace(android.R.id.content, SettingsFragment()).commit()
             }
         }
-
         return super.onOptionsItemSelected(item)
     }
 
@@ -110,7 +111,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
         precipTextView.text = getString(R.string.precipLabel, prec)
     }
 
-    fun setSummary(sum : String) {
+    fun setSummary(sum: String) {
         summaryTextView.text = sum
     }
 
@@ -161,9 +162,9 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
             setTemperature(temp)
             setSummary(summary)
             setPrecip(precip)
-        } catch (e : JSONException) {
+        } catch (e: JSONException) {
             e.printStackTrace()
-            createDialog("JSon Parser ")
+            createDialog("JSONException:" + e.localizedMessage)
         }
     }
 
