@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.github.kittinunf.fuel.android.extension.responseJson
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
     private val RC_LOCATION_PERM = 9001
     private var currentLocation: Location? = null
     private var googleApiClient: GoogleApiClient? = null
+    var weather: Weather? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,12 +105,12 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
         googleApiClient?.connect()
     }
 
-    fun setTemperature(temp: String) {
-        temperatureTextView.text = getString(R.string.temperatureLabel, temp)
+    fun setTemperature(temp: Double) {
+        temperatureTextView.text = getString(R.string.temperatureLabel, temp.toString())
     }
 
-    fun setPrecip(prec: String) {
-        precipTextView.text = getString(R.string.precipLabel, prec)
+    fun setPrecip(prec: Double) {
+        precipTextView.text = getString(R.string.precipLabel, prec.toString())
     }
 
     fun setSummary(sum: String) {
@@ -139,9 +141,11 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
         try {
             val daily = json.getJSONObject("daily")
             val data = daily.getJSONArray("data").getJSONObject(0)
-            val temp = data.getString("apparentTemperatureMax")
-            val precip = data.getString("precipProbability")
+            val temp = data.getDouble("apparentTemperatureMax")
+            val precip = data.getDouble("precipProbability")
+            val windSpeed = data.getDouble("windSpeed")
             val summary = data.getString("summary")
+            weather = Weather(summary, temp, precip, windSpeed)
             val iconType: String = daily.getString("icon")
             when (iconType.trim()) {
                 "rain" -> {
@@ -162,6 +166,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
             setTemperature(temp)
             setSummary(summary)
             setPrecip(precip)
+            Log.d("WEATHER", calculateWeather(weather).toString())
         } catch (e: JSONException) {
             e.printStackTrace()
             createDialog("JSONException:" + e.localizedMessage)
@@ -169,17 +174,30 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks, G
     }
 
     fun createDialog(message: String) {
-        AlertDialog.Builder(this).setMessage(message).setPositiveButton(R.string.ok) { dialog, which ->
+        AlertDialog.Builder(this).setMessage(message).setPositiveButton(R.string.ok) { dialog, _ ->
             dialog.dismiss()
             swipeRefreshLayout.isRefreshing = false
         }.show()
     }
 
     fun createDialog(message: Int) {
-        AlertDialog.Builder(this).setMessage(message).setPositiveButton(R.string.ok) { dialog, which ->
+        AlertDialog.Builder(this).setMessage(message).setPositiveButton(R.string.ok) { dialog, _ ->
             dialog.dismiss()
             swipeRefreshLayout.isRefreshing = false
         }.show()
+    }
+
+    data class Weather(val summary: String, val temperature: Double, val precipProb: Double, val windSpeed: Double)
+
+    fun calculateWeather(weather: Weather?): Double {
+        if (weather != null) {
+            val temperatureFactor: Double = (-0.0215 * Math.pow(weather.temperature, 3.0)) + 0.8754 * Math.pow(weather.temperature, 2.0) + (-4.8251 * weather.temperature) + 7.7724
+            val windFactor: Double = 1.0
+            val precipFactor: Double = 0.0003 * Math.pow(weather.precipProb, 3.0) + (-0.052 * Math.pow(weather.precipProb, 2.0)) + 1.0299 * weather.precipProb + 96.6506
+            val total: Double = .5 * temperatureFactor + .2 * windFactor + .3 * precipFactor
+            return total
+        }
+        return 0.0
     }
 
 }
