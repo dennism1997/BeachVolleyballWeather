@@ -1,16 +1,14 @@
 package com.moumou.beachvolleyballweather
 
 import android.os.Bundle
-import android.preference.PreferenceFragment
+import android.support.v7.preference.PreferenceFragmentCompat
 
 
 /**
  * Created by MouMou on 21-05-17.
  */
-class SettingsFragment : PreferenceFragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+class SettingsFragment : PreferenceFragmentCompat() {
+    override fun onCreatePreferences(p0: Bundle?, p1: String?) {
         addPreferencesFromResource(R.xml.preferences)
     }
 

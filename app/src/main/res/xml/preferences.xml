@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
+    <CheckBoxPreference
         android:defaultValue="true"
-        android:key="@string/settings_temp_key"
-        android:title="Use temperature in celsius"/>
+        android:key="Metric Units"
+        android:summary="Use Metric units"
+        android:title="hoi"/>
 </PreferenceScreen>
