@@ -1,5 +1,6 @@
 package com.moumou.beachvolleyballweather
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -12,11 +13,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         setSupportActionBar(toolbar)
-
-        supportFragmentManager.beginTransaction().replace(R.id.content_frame, MainFragment()).commit()
-
+        supportFragmentManager.beginTransaction().replace(R.id.main_content_frame, MainFragment()).commit()
     }
 
 
@@ -28,10 +26,8 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.settings_action -> {
-                supportFragmentManager.beginTransaction()
-                        .replace(R.id.content_frame, SettingsFragment())
-                        .addToBackStack(null)
-                        .commit()
+                val i = Intent(this, SettingsActivity().javaClass)
+                startActivity(i)
             }
         }
         return super.onOptionsItemSelected(item)
