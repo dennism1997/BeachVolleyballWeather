@@ -7,10 +7,14 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
@@ -29,6 +33,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     private var currentLocation : Location? = null
     private var googleApiClient : GoogleApiClient? = null
     var weather : Weather? = null
+    var iconResource : String = ""
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +54,9 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
 
     override fun onCreateView(inflater : LayoutInflater?, container : ViewGroup?, savedInstanceState : Bundle?) : View? {
         // Inflate the layout for this fragment
-        val view = inflater !!.inflate(R.layout.fragment_main, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_main, container, false)
 
-
+        iconResource = getString(R.string.wi_na)
         return view
     }
 
@@ -60,6 +65,56 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         swipeRefreshLayout.setOnRefreshListener {
             getLocation()
         }
+
+        val fadeInAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+
+        val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+
+        fadeInAnimation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation : Animation?) {
+            }
+
+            override fun onAnimationEnd(animation : Animation?) {
+                weatherIconView.startAnimation(fadeOutAnimation)
+            }
+
+            override fun onAnimationStart(animation : Animation?) {
+            }
+        })
+
+        fadeOutAnimation.setAnimationListener(object : Animation.AnimationListener {
+            var switch : Boolean = false
+            override fun onAnimationRepeat(animation : Animation?) {
+            }
+
+            override fun onAnimationEnd(animation : Animation?) {
+                if (switch) {
+                    weatherIconView.setIconResource(iconResource)
+                    weatherIconView.setBackgroundResource(0)
+                } else {
+                    weatherIconView.text = ""
+                    weatherIconView.setBackgroundResource(R.drawable.ic_done_black_48dp)
+                }
+
+                switch = !switch
+            }
+
+            override fun onAnimationStart(animation : Animation?) {
+            }
+        })
+
+        weatherIconView.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s : Editable?) {
+                weatherIconView.startAnimation(fadeInAnimation)
+            }
+
+            override fun beforeTextChanged(s : CharSequence?, start : Int, count : Int, after : Int) {
+            }
+
+            override fun onTextChanged(s : CharSequence?, start : Int, before : Int, count : Int) {
+            }
+
+        })
     }
 
     override fun onStart() {
@@ -139,28 +194,31 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
             val precip = data.getDouble("precipProbability")
             val windSpeed = data.getDouble("windSpeed")
             val summary = data.getString("summary")
-            weather = Weather(summary, temp, precip, windSpeed)
+            val result = calculateWeather(temp, precip)
+            weather = Weather(summary, temp, precip, windSpeed, result > 1.0, result)
             val iconType : String = daily.getString("icon")
             when (iconType.trim()) {
                 "rain" -> {
-                    weatherIconView.setIconResource(getString(R.string.wi_rain))
+                    iconResource = getString(R.string.wi_rain)
+                    //TODO icon color as global var
                     weatherIconView.setIconColor(R.color.md_blue_500)
                 }
-                "clear-day" -> weatherIconView.setIconResource(getString(R.string.wi_day_sunny))
-                "snow" -> weatherIconView.setIconResource(getString(R.string.wi_snow))
-                "partly-cloudy-day" -> weatherIconView.setIconResource(getString(R.string.wi_day_cloudy))
-                "cloudy" -> weatherIconView.setIconResource(getString(R.string.wi_cloudy))
-                "fog" -> weatherIconView.setIconResource(getString(R.string.wi_fog))
-                "sleet" -> weatherIconView.setIconResource(getString(R.string.wi_sleet))
-                "clear-night" -> weatherIconView.setIconResource(getString(R.string.wi_night_clear))
-                "wind" -> weatherIconView.setIconResource(getString(R.string.wi_night_clear))
-                "partly-cloudy-night" -> weatherIconView.setIconResource(getString(R.string.wi_night_cloudy))
-                else -> weatherIconView.setIconResource(getString(R.string.wi_na))
+                "clear-day" -> iconResource = getString(R.string.wi_day_sunny)
+                "snow" -> iconResource = getString(R.string.wi_snow)
+                "partly-cloudy-day" -> iconResource = getString(R.string.wi_day_cloudy)
+                "cloudy" -> iconResource = getString(R.string.wi_cloudy)
+                "fog" -> iconResource = getString(R.string.wi_fog)
+                "sleet" -> iconResource = getString(R.string.wi_sleet)
+                "clear-night" -> iconResource = getString(R.string.wi_night_clear)
+                "wind" -> iconResource = getString(R.string.wi_night_clear)
+                "partly-cloudy-night" -> iconResource = getString(R.string.wi_night_cloudy)
+                else -> iconResource = getString(R.string.wi_na)
             }
+            weatherIconView.setIconResource(iconResource)
             setTemperature(temp)
             setSummary(summary)
             setPrecip(precip)
-            Log.d("WEATHER", calculateWeather(weather).toString())
+            Log.d("WEATHER", (weather as Weather).weatherResult.toString())
         } catch (e : JSONException) {
             e.printStackTrace()
             createDialog("JSONException:" + e.localizedMessage)
@@ -181,17 +239,14 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         }.show()
     }
 
-    data class Weather(val summary : String, val temperature : Double, val precipProb : Double, val windSpeed : Double)
+    data class Weather(val summary : String, val temperature : Double, val precipProb : Double, val windSpeed : Double, val possible : Boolean, val weatherResult : Double)
 
-    fun calculateWeather(weather : Weather?) : Double {
-        if (weather != null) {
-            val temperatureFactor : Double = (- 0.0215 * Math.pow(weather.temperature, 3.0)) + 0.8754 * Math.pow(weather.temperature, 2.0) + (- 4.8251 * weather.temperature) + 7.7724
-            val windFactor : Double = 1.0
-            val precipFactor : Double = 0.0003 * Math.pow(weather.precipProb, 3.0) + (- 0.052 * Math.pow(weather.precipProb, 2.0)) + 1.0299 * weather.precipProb + 96.6506
-            val total : Double = .5 * temperatureFactor + .2 * windFactor + .3 * precipFactor
-            return total
-        }
-        return 0.0
+    fun calculateWeather(temperature : Double, precipProb : Double) : Double {
+        val temperatureFactor : Double = (-0.0215 * Math.pow(temperature, 3.0)) + 0.8754 * Math.pow(temperature, 2.0) + (-4.8251 * temperature) + 7.7724
+        val windFactor : Double = 1.0
+        val precipFactor : Double = 0.0003 * Math.pow(precipProb, 3.0) + (-0.052 * Math.pow(precipProb, 2.0)) + 1.0299 * precipProb + 96.6506
+        val total : Double = .5 * temperatureFactor + .2 * windFactor + .3 * precipFactor
+        return total
     }
 
 }

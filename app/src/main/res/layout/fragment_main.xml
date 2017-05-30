@@ -29,6 +29,7 @@
                 app:weatherIconColor="#000000"
                 app:weatherIconResource="@string/wi_refresh"
                 app:weatherIconSize="200"/>
+
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout

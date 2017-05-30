@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BeachVolleyballWeather</string>
+    <string name="app_name">Can I Play Beachvolleyball?</string>
     <string name="temperatureLabel">temperature: %1$s °C</string>
     <string name="precipLabel">Precip: %1$s </string>
     <string name="weatherUrl">https://api.darksky.net/forecast/3c6366cf207388e110d98eb55f634e53/</string>

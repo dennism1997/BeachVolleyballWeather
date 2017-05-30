@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/colorPrimary"
-        android:title="@string/settings"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:title="@string/settings"
         app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar"/>
 
     <FrameLayout
@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/settings_toolbar"
         app:layout_constraintVertical_bias="0.0"/>
 
 </android.support.constraint.ConstraintLayout>
