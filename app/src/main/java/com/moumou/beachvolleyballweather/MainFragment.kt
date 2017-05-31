@@ -1,6 +1,7 @@
 package com.moumou.beachvolleyballweather
 
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -34,6 +35,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     private var googleApiClient : GoogleApiClient? = null
     var weather : Weather? = null
     var iconResource : String = ""
+    var iconFont : Typeface? = null
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +51,8 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         } else {
             getLocation()
         }
+
+        iconFont = Typeface.createFromAsset(activity.assets, "fontawesome-webfont.ttf")
 
     }
 
@@ -71,11 +75,15 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
         fadeInAnimation.setAnimationListener(object : Animation.AnimationListener {
+            var switch = true
             override fun onAnimationRepeat(animation : Animation?) {
             }
 
             override fun onAnimationEnd(animation : Animation?) {
-                weatherIconView.startAnimation(fadeOutAnimation)
+                if (switch) {
+                    weatherIconView.startAnimation(fadeOutAnimation)
+                    switch = false
+                }
             }
 
             override fun onAnimationStart(animation : Animation?) {
@@ -83,20 +91,16 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         })
 
         fadeOutAnimation.setAnimationListener(object : Animation.AnimationListener {
-            var switch : Boolean = false
+            var switch : Boolean = true
             override fun onAnimationRepeat(animation : Animation?) {
             }
 
             override fun onAnimationEnd(animation : Animation?) {
                 if (switch) {
-                    weatherIconView.setIconResource(iconResource)
-                    weatherIconView.setBackgroundResource(0)
-                } else {
-                    weatherIconView.text = ""
-                    weatherIconView.setBackgroundResource(R.drawable.ic_done_black_48dp)
+                    weatherIconView.text = getString(R.string.check_icon)
+                    weatherIconView.typeface = iconFont
+                    switch = !switch
                 }
-
-                switch = !switch
             }
 
             override fun onAnimationStart(animation : Animation?) {
