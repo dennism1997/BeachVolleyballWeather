@@ -1,7 +1,7 @@
 package com.moumou.beachvolleyballweather
 
 import android.content.pm.PackageManager
-import android.graphics.Typeface
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -35,7 +35,8 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     private var googleApiClient : GoogleApiClient? = null
     var weather : Weather? = null
     var iconResource : String = ""
-    var iconFont : Typeface? = null
+    var iconColor : Int = Color.BLACK
+    var switch : Boolean = true
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +52,6 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         } else {
             getLocation()
         }
-
-        iconFont = Typeface.createFromAsset(activity.assets, "fontawesome-webfont.ttf")
-
     }
 
     override fun onCreateView(inflater : LayoutInflater?, container : ViewGroup?, savedInstanceState : Bundle?) : View? {
@@ -75,14 +73,12 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
         fadeInAnimation.setAnimationListener(object : Animation.AnimationListener {
-            var switch = true
             override fun onAnimationRepeat(animation : Animation?) {
             }
 
             override fun onAnimationEnd(animation : Animation?) {
                 if (switch) {
                     weatherIconView.startAnimation(fadeOutAnimation)
-                    switch = false
                 }
             }
 
@@ -91,15 +87,20 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         })
 
         fadeOutAnimation.setAnimationListener(object : Animation.AnimationListener {
-            var switch : Boolean = true
             override fun onAnimationRepeat(animation : Animation?) {
             }
 
             override fun onAnimationEnd(animation : Animation?) {
                 if (switch) {
-                    weatherIconView.text = getString(R.string.check_icon)
-                    weatherIconView.typeface = iconFont
-                    switch = !switch
+
+                    weatherIconView.startAnimation(fadeInAnimation)
+                    if (weather?.possible as Boolean) {
+                        weatherIconView.setIconColor(ContextCompat.getColor(context, R.color.weather_possible))
+                    } else {
+                        weatherIconView.setIconColor(ContextCompat.getColor(context, R.color.weather_not_possible))
+                    }
+                    switch = false
+
                 }
             }
 
@@ -109,6 +110,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
 
         weatherIconView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s : Editable?) {
+                switch = true
                 weatherIconView.startAnimation(fadeInAnimation)
             }
 
@@ -192,33 +194,63 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
 
     fun parseResponse(json : JSONObject) {
         try {
-            val daily = json.getJSONObject("daily")
-            val data = daily.getJSONArray("data").getJSONObject(0)
-            val temp = data.getDouble("apparentTemperatureMax")
+            val data = json.getJSONObject("hourly").getJSONArray("data").getJSONObject(0)
+            val temp = data.getDouble("apparentTemperature")
             val precip = data.getDouble("precipProbability")
             val windSpeed = data.getDouble("windSpeed")
             val summary = data.getString("summary")
             val result = calculateWeather(temp, precip)
             weather = Weather(summary, temp, precip, windSpeed, result > 1.0, result)
-            val iconType : String = daily.getString("icon")
+            val iconType : String = data.getString("icon")
             when (iconType.trim()) {
                 "rain" -> {
                     iconResource = getString(R.string.wi_rain)
-                    //TODO icon color as global var
-                    weatherIconView.setIconColor(R.color.md_blue_500)
+                    iconColor = ContextCompat.getColor(context, R.color.md_blue_500)
                 }
-                "clear-day" -> iconResource = getString(R.string.wi_day_sunny)
-                "snow" -> iconResource = getString(R.string.wi_snow)
-                "partly-cloudy-day" -> iconResource = getString(R.string.wi_day_cloudy)
-                "cloudy" -> iconResource = getString(R.string.wi_cloudy)
-                "fog" -> iconResource = getString(R.string.wi_fog)
-                "sleet" -> iconResource = getString(R.string.wi_sleet)
-                "clear-night" -> iconResource = getString(R.string.wi_night_clear)
-                "wind" -> iconResource = getString(R.string.wi_night_clear)
-                "partly-cloudy-night" -> iconResource = getString(R.string.wi_night_cloudy)
-                else -> iconResource = getString(R.string.wi_na)
+                "clear-day" -> {
+                    iconResource = getString(R.string.wi_day_sunny)
+                    iconColor = ContextCompat.getColor(context, R.color.md_yellow_700)
+                }
+                "snow" -> {
+                    iconResource = getString(R.string.wi_snow)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_50)
+                }
+                "partly-cloudy-day" -> {
+                    iconResource = getString(R.string.wi_day_cloudy)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_200)
+                }
+                "cloudy" -> {
+                    iconResource = getString(R.string.wi_cloudy)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_300)
+                }
+                "fog" -> {
+                    iconResource = getString(R.string.wi_fog)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_600)
+                }
+                "sleet" -> {
+                    iconResource = getString(R.string.wi_sleet)
+                    iconColor = ContextCompat.getColor(context, R.color.md_blue_grey_300)
+                }
+                "clear-night" -> {
+                    iconResource = getString(R.string.wi_night_clear)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_300)
+                }
+                "wind" -> {
+                    iconResource = getString(R.string.wi_night_clear)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_200)
+                }
+                "partly-cloudy-night" -> {
+                    iconResource = getString(R.string.wi_night_cloudy)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_400)
+                }
+                else -> {
+                    iconResource = getString(R.string.wi_na)
+                    iconColor = Color.BLACK
+
+                }
             }
             weatherIconView.setIconResource(iconResource)
+            weatherIconView.setIconColor(iconColor)
             setTemperature(temp)
             setSummary(summary)
             setPrecip(precip)
