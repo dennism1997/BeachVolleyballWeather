@@ -4,11 +4,12 @@
     <string name="precipLabel">Precip: %1$s </string>
     <string name="weatherUrl">https://api.darksky.net/forecast/3c6366cf207388e110d98eb55f634e53/</string>
     <string name="defaultLatLong">52.370216,4.895168</string>
-    <string name="celcius">\?units=si</string>
+    <string name="celsius">\?units=si</string>
     <string name="no_location">Could not get your location. Are you connected to the internet?</string>
     <string name="ok">OK</string>
     <string name="provider_disabled">location provider is disabled</string>
     <string name="settings">Settings</string>
     <string name="settings_temp_key">temperature_celsius</string>
     <string name="check_icon">&#xf00c;</string>
+    <string name="volleyballLink">https://icons8.com/icon/16960/Volleyball</string>
 </resources>

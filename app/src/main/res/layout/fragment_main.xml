@@ -23,7 +23,6 @@
                 android:layout_marginStart="0dp"
                 android:gravity="center"
                 app:weatherIconColor="#000000"
-                app:weatherIconResource="@string/wi_refresh"
                 app:weatherIconSize="180"/>
         </FrameLayout>
 

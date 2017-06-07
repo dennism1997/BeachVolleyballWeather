@@ -1,6 +1,6 @@
 package com.moumou.beachvolleyballweather
 
-import android.content.pm.PackageManager
+import android.Manifest
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
@@ -28,7 +28,7 @@ import org.json.JSONObject
 
 class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private val RC_LOCATION_PERM = 9001
+    private val RC_LOCATION_PERMISSION = 9001
 
     //    private var locationString : String = getString(R.string.defaultLatLong)
     private var currentLocation : Location? = null
@@ -44,14 +44,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         if (googleApiClient == null) {
             googleApiClient = GoogleApiClient.Builder(context).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build()
         }
-
-        if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(activity, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                    RC_LOCATION_PERM)
-        } else {
-            getLocation()
-        }
+        getLocation()
     }
 
     override fun onCreateView(inflater : LayoutInflater?, container : ViewGroup?, savedInstanceState : Bundle?) : View? {
@@ -140,10 +133,10 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
             } else {
                 createDialog(R.string.no_location)
             }
-        } catch (e : java.lang.SecurityException) {
+        } catch (e : SecurityException) {
             e.printStackTrace()
-            ActivityCompat.requestPermissions(activity, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                    RC_LOCATION_PERM)
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    RC_LOCATION_PERMISSION)
         }
     }
 
@@ -174,7 +167,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
 
     fun getWeatherData() {
         if (currentLocation != null) {
-            val url = getString(R.string.weatherUrl) + currentLocation?.latitude + "," + currentLocation?.longitude + getString(R.string.celcius)
+            val url = getString(R.string.weatherUrl) + currentLocation?.latitude + "," + currentLocation?.longitude + getString(R.string.celsius)
             url.httpGet().responseJson { _, _, result ->
                 print(result.toString())
                 when (result) {
