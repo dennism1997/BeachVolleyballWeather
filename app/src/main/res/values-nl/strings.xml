@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kan ik gaan beachvolleyballen?</string>
+    <string name="temperatureLabel">Temperatuur: %1$s °C</string>
+    <string name="precipLabel">Neerslag: %1$s </string>
+    <string name="defaultLatLong">52.370216,4.895168</string>
+    <string name="no_location">Kan geen locatie ophalen. Heb je verbinding met het internet?</string>
+    <string name="ok">OK</string>
+    <string name="provider_disabled">Locatie provider staat uit</string>
+    <string name="settings">Instellingen</string>
+    <string name="pref_niceweather_summary">Ik ben een mooi weer beacher</string>
+    <string name="pref_niceweather_title">Mooi Weer</string>
+    <string name="pref_metric_summary">Celsius voor temperatuur, m/s voor wind snelheid</string>
+    <string name="pref_metric_title">Metriek Stelsel</string>
+    <string name="weather_lang">nl</string>
+</resources>

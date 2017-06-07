@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Can I Play Beachvolleyball?</string>
-    <string name="temperatureLabel">temperature: %1$s °C</string>
+    <string name="temperatureLabel">Temperature: %1$s °C</string>
     <string name="precipLabel">Precip: %1$s </string>
     <string name="weatherUrl">https://api.darksky.net/forecast/3c6366cf207388e110d98eb55f634e53/</string>
     <string name="defaultLatLong">52.370216,4.895168</string>
@@ -12,4 +12,10 @@
     <string name="settings_temp_key">temperature_celsius</string>
     <string name="check_icon">&#xf00c;</string>
     <string name="volleyballLink">https://icons8.com/icon/16960/Volleyball</string>
+    <string name="pref_niceweather_summary">I am a nice weather player</string>
+    <string name="pref_niceweather_title">Nice Weather Only</string>
+    <string name="pref_metric_summary">Celsius for temperature, m/s for wind speed</string>
+    <string name="pref_metric_title">Metric Units</string>
+    <string name="weather_lang">en</string>
+    <string name="lang_query"><![CDATA[&lang=]]></string>
 </resources>

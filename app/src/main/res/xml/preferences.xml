@@ -3,7 +3,12 @@
 
     <CheckBoxPreference
         android:defaultValue="true"
-        android:key="Metric Units"
-        android:summary="Use Metric units"
-        android:title="hoi"/>
+        android:key="metric"
+        android:summary="@string/pref_metric_summary"
+        android:title="@string/pref_metric_title"/>
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="nice_weather"
+        android:summary="@string/pref_niceweather_summary"
+        android:title="@string/pref_niceweather_title"/>
 </PreferenceScreen>

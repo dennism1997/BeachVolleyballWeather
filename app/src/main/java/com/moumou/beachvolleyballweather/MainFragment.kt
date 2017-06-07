@@ -167,7 +167,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
 
     fun getWeatherData() {
         if (currentLocation != null) {
-            val url = getString(R.string.weatherUrl) + currentLocation?.latitude + "," + currentLocation?.longitude + getString(R.string.celsius)
+            val url = getString(R.string.weatherUrl) + currentLocation?.latitude + "," + currentLocation?.longitude + getString(R.string.celsius) + getString(R.string.lang_query) + getString(R.string.weather_lang)
             url.httpGet().responseJson { _, _, result ->
                 print(result.toString())
                 when (result) {

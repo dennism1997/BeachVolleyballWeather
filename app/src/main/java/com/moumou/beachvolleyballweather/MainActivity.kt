@@ -1,14 +1,18 @@
 package com.moumou.beachvolleyballweather
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.moumou.beachvolleyballweather.BuildConfig.DEBUG
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +27,11 @@ class MainActivity : AppCompatActivity() {
                     RC_LOCATION_PERMISSION)
         } else {
             supportFragmentManager.beginTransaction().replace(R.id.main_content_frame, MainFragment()).commit()
+        }
+
+        //TODO remove when release
+        if (DEBUG) {
+            setLocale(this, "nl")
         }
     }
 
@@ -56,5 +65,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun setLocale(context : Context, language : String) {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.setLocale(locale)
+        context.resources.updateConfiguration(config,
+                context.resources.displayMetrics)
+    }
 
 }
