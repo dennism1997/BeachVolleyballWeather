@@ -18,4 +18,7 @@
     <string name="weather_lang">en</string>
     <string name="lang_query"><![CDATA[&lang=]]></string>
     <string name="temperature_icon">temperature icon</string>
+    <string name="temperature_too_low">The temperature is too low</string>
+    <string name="wind_too_high">There is too much wind</string>
+    <string name="precip_too_high">The precipitation is too high</string>
 </resources>

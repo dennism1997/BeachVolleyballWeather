@@ -29,6 +29,9 @@ import org.json.JSONObject
 class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private val RC_LOCATION_PERMISSION = 9001
+    private val windSpeedLimit = 0
+    private val temperatureLimit = 10
+    private var precipLimit = .8
 
     //    private var locationString : String = getString(R.string.defaultLatLong)
     private var currentLocation : Location? = null
@@ -37,6 +40,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     var iconResource : String = ""
     var iconColor : Int = Color.BLACK
     var switch : Boolean = true
+
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +65,10 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
             getLocation()
         }
 
+        setAnimations()
+    }
+
+    fun setAnimations() {
         val fadeInAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
 
         val fadeOutAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
@@ -87,7 +95,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
                 if (switch) {
 
                     recyclerview_item_icon.startAnimation(fadeInAnimation)
-                    if (weather.possible as Boolean) {
+                    if (weather.possible) {
                         recyclerview_item_icon.setIconColor(ContextCompat.getColor(context, R.color.weather_possible))
                     } else {
                         recyclerview_item_icon.setIconColor(ContextCompat.getColor(context, R.color.weather_not_possible))
@@ -162,7 +170,13 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     }
 
     fun setSummary(sum : String) {
-        if (weather.possible) {
+        if (weather.precipProb > precipLimit) {
+            summaryTextView.text = getString(R.string.precip_too_high)
+        } else if (weather.temperature < temperatureLimit) {
+            summaryTextView.text = getString(R.string.temperature_too_low)
+        } else if (weather.windFactor < windSpeedLimit) {
+            summaryTextView.text = getString(R.string.wind_too_high)
+        } else {
             summaryTextView.text = sum
         }
     }
@@ -248,7 +262,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
             setTemperature(temp)
             setSummary(summary)
             setPrecip(precip)
-            Log.d("WEATHER", (weather as Weather).weatherResult.toString())
+            Log.d("WEATHER", (weather).weatherResult.toString())
         } catch (e : JSONException) {
             e.printStackTrace()
             createDialog("JSONException:" + e.localizedMessage)
@@ -268,6 +282,5 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
             swipeRefreshLayout.isRefreshing = false
         }.show()
     }
-
 
 }
