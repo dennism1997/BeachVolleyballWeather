@@ -20,7 +20,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //TODO remove when release
+        if (DEBUG) {
+            setLocale(this, "nl")
+        }
+
         setContentView(R.layout.activity_main)
+        toolbar.title = getString(R.string.app_name)
         setSupportActionBar(toolbar)
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
@@ -29,10 +36,6 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().replace(R.id.main_content_frame, MainFragment()).commit()
         }
 
-        //TODO remove when release
-        if (DEBUG) {
-            setLocale(this, "nl")
-        }
     }
 
     override fun onCreateOptionsMenu(menu : Menu?) : Boolean {

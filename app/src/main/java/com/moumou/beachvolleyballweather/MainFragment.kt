@@ -33,7 +33,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     //    private var locationString : String = getString(R.string.defaultLatLong)
     private var currentLocation : Location? = null
     private var googleApiClient : GoogleApiClient? = null
-    var weather : Weather? = null
+    var weather : Weather = Weather("dummy", 0.0, 0.0, 0.0)
     var iconResource : String = ""
     var iconColor : Int = Color.BLACK
     var switch : Boolean = true
@@ -71,7 +71,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
 
             override fun onAnimationEnd(animation : Animation?) {
                 if (switch) {
-                    weatherIconView.startAnimation(fadeOutAnimation)
+                    recyclerview_item_icon.startAnimation(fadeOutAnimation)
                 }
             }
 
@@ -86,11 +86,11 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
             override fun onAnimationEnd(animation : Animation?) {
                 if (switch) {
 
-                    weatherIconView.startAnimation(fadeInAnimation)
-                    if (weather?.possible as Boolean) {
-                        weatherIconView.setIconColor(ContextCompat.getColor(context, R.color.weather_possible))
+                    recyclerview_item_icon.startAnimation(fadeInAnimation)
+                    if (weather.possible as Boolean) {
+                        recyclerview_item_icon.setIconColor(ContextCompat.getColor(context, R.color.weather_possible))
                     } else {
-                        weatherIconView.setIconColor(ContextCompat.getColor(context, R.color.weather_not_possible))
+                        recyclerview_item_icon.setIconColor(ContextCompat.getColor(context, R.color.weather_not_possible))
                     }
                     switch = false
 
@@ -101,10 +101,10 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
             }
         })
 
-        weatherIconView.addTextChangedListener(object : TextWatcher {
+        recyclerview_item_icon.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s : Editable?) {
                 switch = true
-                weatherIconView.startAnimation(fadeInAnimation)
+                recyclerview_item_icon.startAnimation(fadeInAnimation)
             }
 
             override fun beforeTextChanged(s : CharSequence?, start : Int, count : Int, after : Int) {
@@ -162,7 +162,9 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     }
 
     fun setSummary(sum : String) {
-        summaryTextView.text = sum
+        if (weather.possible) {
+            summaryTextView.text = sum
+        }
     }
 
     fun getWeatherData() {
@@ -192,8 +194,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
             val precip = data.getDouble("precipProbability")
             val windSpeed = data.getDouble("windSpeed")
             val summary = data.getString("summary")
-            val result = calculateWeather(temp, precip)
-            weather = Weather(summary, temp, precip, windSpeed, result > 1.0, result)
+            weather = Weather(summary, temp, precip, windSpeed)
             val iconType : String = data.getString("icon")
             when (iconType.trim()) {
                 "rain" -> {
@@ -206,19 +207,19 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
                 }
                 "snow" -> {
                     iconResource = getString(R.string.wi_snow)
-                    iconColor = ContextCompat.getColor(context, R.color.md_grey_50)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_300)
                 }
                 "partly-cloudy-day" -> {
                     iconResource = getString(R.string.wi_day_cloudy)
-                    iconColor = ContextCompat.getColor(context, R.color.md_grey_200)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_500)
                 }
                 "cloudy" -> {
                     iconResource = getString(R.string.wi_cloudy)
-                    iconColor = ContextCompat.getColor(context, R.color.md_grey_300)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_500)
                 }
                 "fog" -> {
                     iconResource = getString(R.string.wi_fog)
-                    iconColor = ContextCompat.getColor(context, R.color.md_grey_600)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_500)
                 }
                 "sleet" -> {
                     iconResource = getString(R.string.wi_sleet)
@@ -226,15 +227,15 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
                 }
                 "clear-night" -> {
                     iconResource = getString(R.string.wi_night_clear)
-                    iconColor = ContextCompat.getColor(context, R.color.md_grey_300)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_400)
                 }
                 "wind" -> {
                     iconResource = getString(R.string.wi_night_clear)
-                    iconColor = ContextCompat.getColor(context, R.color.md_grey_200)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_400)
                 }
                 "partly-cloudy-night" -> {
                     iconResource = getString(R.string.wi_night_cloudy)
-                    iconColor = ContextCompat.getColor(context, R.color.md_grey_400)
+                    iconColor = ContextCompat.getColor(context, R.color.md_grey_600)
                 }
                 else -> {
                     iconResource = getString(R.string.wi_na)
@@ -242,8 +243,8 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
 
                 }
             }
-            weatherIconView.setIconResource(iconResource)
-            weatherIconView.setIconColor(iconColor)
+            recyclerview_item_icon.setIconResource(iconResource)
+            recyclerview_item_icon.setIconColor(iconColor)
             setTemperature(temp)
             setSummary(summary)
             setPrecip(precip)
@@ -268,14 +269,5 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         }.show()
     }
 
-    data class Weather(val summary : String, val temperature : Double, val precipProb : Double, val windSpeed : Double, val possible : Boolean, val weatherResult : Double)
-
-    fun calculateWeather(temperature : Double, precipProb : Double) : Double {
-        val temperatureFactor : Double = (-0.0215 * Math.pow(temperature, 3.0)) + 0.8754 * Math.pow(temperature, 2.0) + (-4.8251 * temperature) + 7.7724
-        val windFactor : Double = 1.0
-        val precipFactor : Double = 0.0003 * Math.pow(precipProb, 3.0) + (-0.052 * Math.pow(precipProb, 2.0)) + 1.0299 * precipProb + 96.6506
-        val total : Double = .5 * temperatureFactor + .2 * windFactor + .3 * precipFactor
-        return total
-    }
 
 }

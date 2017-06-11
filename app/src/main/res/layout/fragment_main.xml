@@ -14,10 +14,10 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="4">
 
             <com.github.pwittchen.weathericonview.WeatherIconView
-                android:id="@+id/weatherIconView"
+                android:id="@+id/recyclerview_item_icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="0dp"
@@ -26,54 +26,151 @@
                 app:weatherIconSize="180"/>
         </FrameLayout>
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/constraintLayout"
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:fitsSystemWindows="true"
-            >
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/summaryTextView"
+            <ImageView
+                android:id="@+id/summary_icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/temperature_icon"
+                android:src="@drawable/ic_thermometer_black_48dp"/>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Hello World!"
-                app:layout_constraintBottom_toTopOf="@+id/temperatureTextView"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toEndOf="@+id/summary_icon"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp">
 
-            <TextView
-                android:id="@+id/temperatureTextView"
+                <TextView
+                    android:id="@+id/summaryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/temperatureLabel"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/temperature_icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/temperature_icon"
+                android:src="@drawable/ic_thermometer_black_48dp"/>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/temperatureLabel"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toEndOf="@+id/temperature_icon"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp">
 
-            <TextView
-                android:id="@+id/precipTextView"
+                <TextView
+                    android:id="@+id/temperatureTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/temperatureLabel"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/precip_icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/temperature_icon"
+                android:src="@drawable/ic_thermometer_black_48dp"/>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/precipLabel"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/temperatureTextView"/>
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toEndOf="@+id/precip_icon"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp">
 
-        </android.support.constraint.ConstraintLayout>
+                <TextView
+                    android:id="@+id/precipTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/temperatureLabel"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/wind_icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/temperature_icon"
+                android:src="@drawable/ic_thermometer_black_48dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toEndOf="@+id/wind_icon"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp">
+
+                <TextView
+                    android:id="@+id/windTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/temperatureLabel"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
     </LinearLayout>
 
 
