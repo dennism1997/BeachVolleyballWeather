@@ -33,7 +33,6 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     private val temperatureLimit = 10
     private var precipLimit = .8
 
-    //    private var locationString : String = getString(R.string.defaultLatLong)
     private var currentLocation : Location? = null
     private var googleApiClient : GoogleApiClient? = null
     var weather : Weather = Weather("dummy", 0.0, 0.0, 0.0)

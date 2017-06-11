@@ -1,27 +1,31 @@
 <resources>
+    <!--Localized Strings-->
     <string name="app_name">Can I Play Beachvolleyball?</string>
     <string name="temperatureLabel">Temperature: %1$s °C</string>
     <string name="precipLabel">Precip: %1$s </string>
     <string name="windspeedLabel">Wind Speed: %1$s </string>
-    <string name="meters_per_second">m/s</string>
     <string name="weatherUrl">https://api.darksky.net/forecast/3c6366cf207388e110d98eb55f634e53/</string>
     <string name="defaultLatLong">52.370216,4.895168</string>
-    <string name="celsius">\?units=si</string>
     <string name="no_location">Could not get your location. Are you connected to the internet?</string>
-    <string name="ok">OK</string>
     <string name="provider_disabled">location provider is disabled</string>
     <string name="settings">Settings</string>
-    <string name="settings_temp_key">temperature_celsius</string>
-    <string name="check_icon">&#xf00c;</string>
     <string name="pref_niceweather_summary">I am a nice weather player</string>
     <string name="pref_niceweather_title">Nice Weather Only</string>
     <string name="pref_metric_summary">Celsius for temperature, m/s for wind speed</string>
     <string name="pref_metric_title">Metric Units</string>
     <string name="weather_lang">en</string>
+
+    <!--Non Localized strings-->
+    <string name="meters_per_second">m/s</string>
     <string name="lang_query"><![CDATA[&lang=]]></string>
     <string name="temperature_icon">temperature icon</string>
     <string name="temperature_too_low">The temperature is too low</string>
     <string name="wind_too_high">There is too much wind</string>
     <string name="precip_too_high">The precipitation is too high</string>
     <string name="precip_icon">precip_icon</string>
+    <string name="celsius">\?units=si</string>
+    <string name="ok">OK</string>
+    <string name="settings_temp_key">temperature_celsius</string>
+    <string name="check_icon">&#xf00c;</string>
+
 </resources>

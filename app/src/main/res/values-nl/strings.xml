@@ -6,7 +6,6 @@
     <string name="windspeedLabel">Windsnelheid: %1$s </string>
     <string name="defaultLatLong">52.370216,4.895168</string>
     <string name="no_location">Kan geen locatie ophalen. Heb je verbinding met het internet?</string>
-    <string name="ok">OK</string>
     <string name="provider_disabled">Locatie provider staat uit</string>
     <string name="settings">Instellingen</string>
     <string name="pref_niceweather_summary">Ik ben een mooi weer beacher</string>
