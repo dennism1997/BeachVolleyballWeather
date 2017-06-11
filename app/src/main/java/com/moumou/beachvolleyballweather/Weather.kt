@@ -1,8 +1,5 @@
 package com.moumou.beachvolleyballweather
 
-/**
- * Created by MouMou on 08-06-17.
- */
 data class Weather(val summary : String, val temperature : Double, val precipProb : Double, val windSpeed : Double) {
 
     val weatherResult : Double
@@ -10,6 +7,7 @@ data class Weather(val summary : String, val temperature : Double, val precipPro
     val temperatureFactor : Double
     val windFactor : Double
     val precipFactor : Double
+
     init {
         temperatureFactor = calculateTemperatureFactor()
         windFactor = calculateWindFactor()
