@@ -41,7 +41,6 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     var iconColor : Int = Color.BLACK
     var switch : Boolean = true
 
-
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -181,6 +180,10 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         }
     }
 
+    fun setWindspeed(speed : Double) {
+        windTextView.text = getString(R.string.windspeedLabel, speed.toString())
+    }
+
     fun getWeatherData() {
         if (currentLocation != null) {
             val url = getString(R.string.weatherUrl) + currentLocation?.latitude + "," + currentLocation?.longitude + getString(R.string.celsius) + getString(R.string.lang_query) + getString(R.string.weather_lang)
@@ -257,16 +260,21 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
 
                 }
             }
-            recyclerview_item_icon.setIconResource(iconResource)
-            recyclerview_item_icon.setIconColor(iconColor)
-            setTemperature(temp)
-            setSummary(summary)
-            setPrecip(precip)
             Log.d("WEATHER", (weather).weatherResult.toString())
+            setValues()
         } catch (e : JSONException) {
             e.printStackTrace()
             createDialog("JSONException:" + e.localizedMessage)
         }
+    }
+
+    fun setValues() {
+        setTemperature(weather.temperature)
+        setSummary(weather.summary)
+        setPrecip(weather.precipProb)
+        setWindspeed(weather.windSpeed)
+        recyclerview_item_icon.setIconResource(iconResource)
+        recyclerview_item_icon.setIconColor(iconColor)
     }
 
     fun createDialog(message : String) {

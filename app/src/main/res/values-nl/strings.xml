@@ -3,6 +3,7 @@
     <string name="app_name">Kan ik gaan beachvolleyballen?</string>
     <string name="temperatureLabel">Temperatuur: %1$s °C</string>
     <string name="precipLabel">Neerslag: %1$s </string>
+    <string name="windspeedLabel">Windsnelheid: %1$s </string>
     <string name="defaultLatLong">52.370216,4.895168</string>
     <string name="no_location">Kan geen locatie ophalen. Heb je verbinding met het internet?</string>
     <string name="ok">OK</string>
