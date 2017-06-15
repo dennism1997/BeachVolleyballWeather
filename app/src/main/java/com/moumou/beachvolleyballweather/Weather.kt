@@ -32,4 +32,17 @@ data class Weather(val summary : String, val temperature : Double, val precipPro
     fun calculatePrecipFactor() : Double {
         return (0.0003 * Math.pow(precipProb, 3.0) + (-0.052 * Math.pow(precipProb, 2.0)) + 1.0299 * precipProb + 96.6506) / 100
     }
+
 }
+
+object WeatherCalculator{
+
+    fun toFahrenheit(temperature : Double) : Double {
+        return temperature * 9.0/5.0 + 32.0
+    }
+
+    fun toMilesPerHour(speed : Double) : Double {
+        return speed * 2.24
+    }
+}
+

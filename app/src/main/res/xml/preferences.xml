@@ -3,7 +3,7 @@
 
     <CheckBoxPreference
         android:defaultValue="true"
-        android:key="metric"
+        android:key="@string/settings_metric_key"
         android:summary="@string/pref_metric_summary"
         android:title="@string/pref_metric_title"/>
     <CheckBoxPreference

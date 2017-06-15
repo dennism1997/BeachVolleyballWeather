@@ -10,7 +10,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.moumou.beachvolleyballweather.BuildConfig.DEBUG
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -22,18 +21,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //TODO remove when release
-        if (DEBUG) {
-            setLocale(this, "nl")
-        }
+//        if (DEBUG) {
+//            setLocale(this, "nl")
+//        }
 
         setContentView(R.layout.activity_main)
         toolbar.title = getString(R.string.app_name)
         setSupportActionBar(toolbar)
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                    RC_LOCATION_PERMISSION)
+        if (ContextCompat.checkSelfPermission(this,
+                                              android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                                              arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                                              RC_LOCATION_PERMISSION)
         } else {
-            supportFragmentManager.beginTransaction().replace(R.id.main_content_frame, MainFragment()).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.main_content_frame,
+                                                              MainFragment()).commit()
         }
 
     }
@@ -53,15 +55,18 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onRequestPermissionsResult(requestCode : Int, permissions : Array<out String>, grantResults : IntArray) {
+    override fun onRequestPermissionsResult(requestCode : Int,
+                                            permissions : Array<out String>,
+                                            grantResults : IntArray) {
         when (requestCode) {
             RC_LOCATION_PERMISSION -> {
                 if (grantResults.isNotEmpty()
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     recreate()
                 } else {
-                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                            RC_LOCATION_PERMISSION)
+                    ActivityCompat.requestPermissions(this,
+                                                      arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                                                      RC_LOCATION_PERMISSION)
                 }
             }
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -74,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         val config = Configuration()
         config.setLocale(locale)
         context.resources.updateConfiguration(config,
-                context.resources.displayMetrics)
+                                              context.resources.displayMetrics)
     }
 
 }

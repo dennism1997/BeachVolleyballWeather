@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
+import android.support.v7.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -29,6 +30,9 @@ import org.json.JSONObject
 class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private val RC_LOCATION_PERMISSION = 9001
+
+    private var metric : Boolean = true
+
     private val windSpeedLimit = 0
     private val temperatureLimit = 10
     private var precipLimit = .8
@@ -44,12 +48,15 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         super.onCreate(savedInstanceState)
 
         if (googleApiClient == null) {
-            googleApiClient = GoogleApiClient.Builder(context).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build()
+            googleApiClient = GoogleApiClient.Builder(context).addConnectionCallbacks(
+                    this).addOnConnectionFailedListener(
+                    this).addApi(LocationServices.API).build()
         }
-        getLocation()
     }
 
-    override fun onCreateView(inflater : LayoutInflater?, container : ViewGroup?, savedInstanceState : Bundle?) : View? {
+    override fun onCreateView(inflater : LayoutInflater?,
+                              container : ViewGroup?,
+                              savedInstanceState : Bundle?) : View? {
         // Inflate the layout for this fragment
         val view = inflater!!.inflate(R.layout.fragment_main, container, false)
 
@@ -94,9 +101,11 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
 
                     recyclerview_item_icon.startAnimation(fadeInAnimation)
                     if (weather.possible) {
-                        recyclerview_item_icon.setIconColor(ContextCompat.getColor(context, R.color.weather_possible))
+                        recyclerview_item_icon.setIconColor(ContextCompat.getColor(context,
+                                                                                   R.color.weather_possible))
                     } else {
-                        recyclerview_item_icon.setIconColor(ContextCompat.getColor(context, R.color.weather_not_possible))
+                        recyclerview_item_icon.setIconColor(ContextCompat.getColor(context,
+                                                                                   R.color.weather_not_possible))
                     }
                     switch = false
 
@@ -113,7 +122,10 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
                 recyclerview_item_icon.startAnimation(fadeInAnimation)
             }
 
-            override fun beforeTextChanged(s : CharSequence?, start : Int, count : Int, after : Int) {
+            override fun beforeTextChanged(s : CharSequence?,
+                                           start : Int,
+                                           count : Int,
+                                           after : Int) {
             }
 
             override fun onTextChanged(s : CharSequence?, start : Int, before : Int, count : Int) {
@@ -122,8 +134,10 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         })
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
+        getSettings()
+        getLocation()
     }
 
     override fun onStop() {
@@ -141,8 +155,9 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
             }
         } catch (e : SecurityException) {
             e.printStackTrace()
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    RC_LOCATION_PERMISSION)
+            ActivityCompat.requestPermissions(activity,
+                                              arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                                              RC_LOCATION_PERMISSION)
         }
     }
 
@@ -160,32 +175,56 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     }
 
     fun setTemperature(temp : Double) {
-        temperatureTextView.text = getString(R.string.temperatureLabel, temp.toString())
+        val s : String
+        if (metric) {
+            s = getString(R.string.temperatureLabel,
+                          Math.round(temp).toString()) + getString(R.string.unit_celsius)
+        } else {
+            s = getString(R.string.temperatureLabel,
+                          Math.round(WeatherCalculator.toFahrenheit(temp)).toString()) + getString(
+                    R.string.unit_fahrenheit)
+        }
+        temperatureTextView.text = s
     }
 
     fun setPrecip(prec : Double) {
-        precipTextView.text = getString(R.string.precipLabel, prec.toString())
+        val s = getString(R.string.precipLabel, Math.round(prec).toString()) + '%'
+        precipTextView.text = s
     }
 
     fun setSummary(sum : String) {
+        val s : String
         if (weather.precipProb > precipLimit) {
-            summaryTextView.text = getString(R.string.precip_too_high)
+            s = getString(R.string.precip_too_high)
         } else if (weather.temperature < temperatureLimit) {
-            summaryTextView.text = getString(R.string.temperature_too_low)
+            s = getString(R.string.temperature_too_low)
         } else if (weather.windFactor < windSpeedLimit) {
-            summaryTextView.text = getString(R.string.wind_too_high)
+            s = getString(R.string.wind_too_high)
         } else {
-            summaryTextView.text = sum
+            s = sum
         }
+        summaryTextView.text = s
     }
 
     fun setWindspeed(speed : Double) {
-        windTextView.text = getString(R.string.windspeedLabel, speed.toString())
+        val s : String
+        if (metric) {
+            s = getString(R.string.windspeedLabel,
+                          Math.round(speed).toString()) + getString(R.string.unit_meters_per_second)
+        } else {
+            s = getString(R.string.windspeedLabel,
+                          Math.round(WeatherCalculator.toMilesPerHour(speed)).toString()) + getString(
+                    R.string.unit_miles_per_hour)
+        }
+        windTextView.text = s
     }
 
     fun getWeatherData() {
         if (currentLocation != null) {
-            val url = getString(R.string.weatherUrl) + currentLocation?.latitude + "," + currentLocation?.longitude + getString(R.string.celsius) + getString(R.string.lang_query) + getString(R.string.weather_lang)
+            val url = getString(R.string.weatherUrl) +
+                    currentLocation?.latitude + "," + currentLocation?.longitude +
+                    getString(R.string.query_celsius) + getString(R.string.lang_query) +
+                    getString(R.string.weather_lang)
             url.httpGet().responseJson { _, _, result ->
                 print(result.toString())
                 when (result) {
@@ -196,6 +235,8 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
 
                     }
                     is Result.Failure -> {
+                        result.getException().printStackTrace()
+                        createDialog(result.error.localizedMessage)
                         swipeRefreshLayout.isRefreshing = false
                     }
                 }
@@ -267,6 +308,12 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         }
     }
 
+    fun getSettings() {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+        metric = sharedPref.getBoolean(getString(R.string.settings_metric_key), true)
+
+    }
+
     fun setValues() {
         setTemperature(weather.temperature)
         setSummary(weather.summary)
@@ -277,14 +324,16 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     }
 
     fun createDialog(message : String) {
-        AlertDialog.Builder(context).setMessage(message).setPositiveButton(R.string.ok) { dialog, _ ->
+        AlertDialog.Builder(context).setMessage(message).setPositiveButton(
+                R.string.ok) { dialog, _ ->
             dialog.dismiss()
             swipeRefreshLayout.isRefreshing = false
         }.show()
     }
 
     fun createDialog(message : Int) {
-        AlertDialog.Builder(context).setMessage(message).setPositiveButton(R.string.ok) { dialog, _ ->
+        AlertDialog.Builder(context).setMessage(message).setPositiveButton(
+                R.string.ok) { dialog, _ ->
             dialog.dismiss()
             swipeRefreshLayout.isRefreshing = false
         }.show()
