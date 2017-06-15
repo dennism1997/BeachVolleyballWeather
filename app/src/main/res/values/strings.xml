@@ -30,8 +30,11 @@
     <string name="precip_icon">precip_icon</string>
     <string name="query_celsius">\?units=si</string>
     <string name="ok">OK</string>
-    <string name="settings_temp_key">temperature_celsius</string>
     <string name="check_icon">&#xf00c;</string>
     <string name="settings_metric_key">SETTINGS_METRIC</string>
+    <string name="email">moumoudevelopment@gmail.com</string>
+    <string name="mailto">mailto:</string>
+    <string name="mail_body"><![CDATA[\?subject= Request BeachvolleyballWeather feature&body=I would like to request the following feature: ]]></string>
+    <string name="settings_nice_weather_key">nice_weather</string>
 
 </resources>

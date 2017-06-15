@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -50,6 +51,13 @@ class MainActivity : AppCompatActivity() {
             R.id.settings_action -> {
                 val i = Intent(this, SettingsActivity().javaClass)
                 startActivity(i)
+            }
+            R.id.request_feature_action -> {
+                val emailIntent = Intent(Intent.ACTION_SENDTO)
+                emailIntent.data = (Uri.parse(getString(R.string.mailto) + getString(R.string.email) + getString(
+                        R.string.mail_body)))
+
+                startActivity(Intent.createChooser(emailIntent, "Send mail..."))
             }
         }
         return super.onOptionsItemSelected(item)

@@ -134,8 +134,8 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         })
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         getSettings()
         getLocation()
     }
@@ -311,6 +311,8 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     fun getSettings() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
         metric = sharedPref.getBoolean(getString(R.string.settings_metric_key), true)
+        val niceWeatherOnly = sharedPref.getBoolean(getString(R.string.settings_nice_weather_key), false)
+        WeatherCalculator.setThreshhold(niceWeatherOnly)
 
     }
 

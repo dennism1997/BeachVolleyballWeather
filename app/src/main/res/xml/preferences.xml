@@ -8,6 +8,6 @@
         android:title="@string/pref_metric_title"/>
     <CheckBoxPreference
         android:defaultValue="true"
-        android:key="nice_weather"
+        android:key="@string/settings_nice_weather_key"
         android:title="@string/pref_niceweather_title"/>
 </PreferenceScreen>

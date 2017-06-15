@@ -13,7 +13,7 @@ data class Weather(val summary : String, val temperature : Double, val precipPro
         windFactor = calculateWindFactor()
         precipFactor = calculatePrecipFactor()
         weatherResult = calculateWeather()
-        possible = weatherResult > .75
+        possible = weatherResult > WeatherCalculator.Threshold
     }
 
     fun calculateWeather() : Double {
@@ -36,6 +36,24 @@ data class Weather(val summary : String, val temperature : Double, val precipPro
 }
 
 object WeatherCalculator{
+
+    private const val lowThreshold = 0.75
+    private const val highThreshold = 1.0
+
+    private var _threshold = lowThreshold
+    public var Threshold : Double
+        get() = _threshold
+        set(value) {
+            _threshold = value
+        }
+
+    fun setThreshhold(niceWeatherOnly : Boolean) {
+        if(niceWeatherOnly){
+            _threshold = highThreshold
+        } else {
+            _threshold = lowThreshold
+        }
+    }
 
     fun toFahrenheit(temperature : Double) : Double {
         return temperature * 9.0/5.0 + 32.0
