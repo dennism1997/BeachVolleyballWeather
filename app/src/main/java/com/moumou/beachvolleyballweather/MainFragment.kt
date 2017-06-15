@@ -208,6 +208,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
             s = sum
         }
         summaryTextView.text = s
+        summaryTextView.isSelected = true
     }
 
     fun setWindspeed(speed : Double) {
