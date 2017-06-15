@@ -41,13 +41,13 @@ object WeatherCalculator{
     private const val highThreshold = 1.0
 
     private var _threshold = lowThreshold
-    public var Threshold : Double
+    var Threshold : Double
         get() = _threshold
         set(value) {
             _threshold = value
         }
 
-    fun setThreshhold(niceWeatherOnly : Boolean) {
+    fun setThreshold(niceWeatherOnly : Boolean) {
         if(niceWeatherOnly){
             _threshold = highThreshold
         } else {
