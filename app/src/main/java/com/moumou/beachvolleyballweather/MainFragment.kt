@@ -24,6 +24,8 @@ import com.github.kittinunf.result.Result
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
+import com.moumou.beachvolleyballweather.Weather.Weather
+import com.moumou.beachvolleyballweather.Weather.WeatherCalculator
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.json.JSONException
 import org.json.JSONObject
