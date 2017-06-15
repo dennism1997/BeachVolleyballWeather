@@ -2,6 +2,7 @@ package com.moumou.beachvolleyballweather
 
 import android.Manifest
 import android.graphics.Color
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -26,6 +27,7 @@ import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.*
 
 class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -241,6 +243,12 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
                     }
                 }
             }
+
+            val gcd = Geocoder(context, Locale.getDefault())
+            val cities = gcd.getFromLocation(currentLocation?.latitude!!,
+                                             currentLocation?.longitude!!, 1)
+            //TODO do something with the city
+            Log.d("location", cities[0].locality)
         }
     }
 
@@ -311,7 +319,8 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     fun getSettings() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
         metric = sharedPref.getBoolean(getString(R.string.settings_metric_key), true)
-        val niceWeatherOnly = sharedPref.getBoolean(getString(R.string.settings_nice_weather_key), false)
+        val niceWeatherOnly = sharedPref.getBoolean(getString(R.string.settings_nice_weather_key),
+                                                    false)
         WeatherCalculator.setThreshold(niceWeatherOnly)
 
     }
