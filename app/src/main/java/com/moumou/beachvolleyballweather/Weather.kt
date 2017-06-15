@@ -13,11 +13,11 @@ data class Weather(val summary : String, val temperature : Double, val precipPro
         windFactor = calculateWindFactor()
         precipFactor = calculatePrecipFactor()
         weatherResult = calculateWeather()
-        possible = weatherResult > .7
+        possible = weatherResult > .75
     }
 
     fun calculateWeather() : Double {
-        val total : Double = .5 * temperatureFactor + .2 * windFactor + .3 * precipFactor
+        val total : Double = .5 * temperatureFactor + .3 * windFactor + .2 * precipFactor
         return total
     }
 

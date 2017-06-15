@@ -8,9 +8,10 @@
     <string name="no_location">Kan geen locatie ophalen. Heb je verbinding met het internet?</string>
     <string name="provider_disabled">Locatie provider staat uit</string>
     <string name="settings">Instellingen</string>
-    <string name="pref_niceweather_summary">Ik ben een mooi weer beacher</string>
-    <string name="pref_niceweather_title">Mooi Weer</string>
-    <string name="pref_metric_summary">Celsius voor temperatuur, m/s voor wind snelheid</string>
+    <string name="pref_niceweather_summary">Ik houd niet zo van regen</string>
+    <string name="pref_niceweather_title">Mooi Weer Beacher</string>
+    <string name="pref_metric_summary">°C voor temperatuur, m/s voor windsnelheid</string>
     <string name="pref_metric_title">Metriek Stelsel</string>
     <string name="weather_lang">nl</string>
+    <string name="request_feature">Vraag feature aan</string>
 </resources>

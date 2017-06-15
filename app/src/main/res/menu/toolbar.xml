@@ -4,8 +4,13 @@
 
     <item
         android:id="@+id/settings_action"
-        android:icon="@drawable/ic_settings_white_48dp"
         android:title="@string/settings"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/request_feature_action"
+        android:title="@string/request_feature"
         app:showAsAction="never"
         />
 </menu>
