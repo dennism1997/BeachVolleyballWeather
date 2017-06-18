@@ -22,7 +22,7 @@ public class WeatherTest {
                 {15, 0, 0, true},
                 {15, 100, 0, false},
                 {15, 50, 5, true},
-                {5, 0, 0, false},
+                {6, 0, 0, false},
                 {15, 0, 0, true}});
     }
 
