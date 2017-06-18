@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private val RC_LOCATION_PERMISSION = 9001
 
     override fun onCreate(savedInstanceState : Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
         //TODO remove when release
