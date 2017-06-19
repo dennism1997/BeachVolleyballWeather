@@ -43,7 +43,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
 
     private var currentLocation : Location? = null
     private var googleApiClient : GoogleApiClient? = null
-    var weather : Weather = Weather("dummy", 0.0, 0.0, 0.0)
+    var weather : Weather = Weather("dummy", 0.0, 0.0, 0.0, "Silicon Valley")
     var iconResource : String = ""
     var iconColor : Int = Color.BLACK
     var switch : Boolean = true
@@ -166,7 +166,6 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
     }
 
     override fun onConnectionSuspended(p0 : Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onConnectionFailed(p0 : ConnectionResult) {
@@ -224,6 +223,10 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         windTextView.text = s
     }
 
+    fun setLocationLabel(location : String) {
+        locationTextView.text = getString(R.string.locationLabel, location)
+    }
+
     fun getWeatherData() {
         if (currentLocation != null) {
             val url = getString(R.string.weatherUrl) +
@@ -247,11 +250,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
                 }
             }
 
-            val gcd = Geocoder(context, Locale.getDefault())
-            val cities = gcd.getFromLocation(currentLocation?.latitude!!,
-                                             currentLocation?.longitude!!, 1)
-            //TODO do something with the city
-            Log.d("location", cities[0].locality)
+
         }
     }
 
@@ -262,7 +261,14 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
             val precip = data.getDouble("precipProbability")
             val windSpeed = data.getDouble("windSpeed")
             val summary = data.getString("summary")
-            weather = Weather(summary, temp, precip, windSpeed)
+
+            val gcd = Geocoder(context, Locale.getDefault())
+            val cities = gcd.getFromLocation(currentLocation?.latitude!!,
+                                             currentLocation?.longitude!!, 1)
+            //TODO do something with the city
+            Log.d("location", cities[0].locality)
+
+            weather = Weather(summary, temp, precip, windSpeed, cities[0].locality)
             val iconType : String = data.getString("icon")
             when (iconType.trim()) {
                 "rain" -> {
@@ -333,24 +339,22 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         setSummary(weather.summary)
         setPrecip(weather.precipProb)
         setWindspeed(weather.windSpeed)
+        setLocationLabel(weather.city)
         recyclerview_item_icon.setIconResource(iconResource)
         recyclerview_item_icon.setIconColor(iconColor)
     }
 
     fun createDialog(message : String) {
+        setValues()
+        swipeRefreshLayout.isRefreshing = false
         AlertDialog.Builder(context).setMessage(message).setPositiveButton(
                 R.string.ok) { dialog, _ ->
             dialog.dismiss()
-            swipeRefreshLayout.isRefreshing = false
         }.show()
     }
 
     fun createDialog(message : Int) {
-        AlertDialog.Builder(context).setMessage(message).setPositiveButton(
-                R.string.ok) { dialog, _ ->
-            dialog.dismiss()
-            swipeRefreshLayout.isRefreshing = false
-        }.show()
+        createDialog(getString(message))
     }
 
 }

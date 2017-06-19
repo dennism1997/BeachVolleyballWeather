@@ -14,4 +14,6 @@
     <string name="pref_metric_title">Metriek Stelsel</string>
     <string name="weather_lang">nl</string>
     <string name="request_feature">Vraag feature aan</string>
+    <string name="locationLabel">Locatie: %1$s </string>
+
 </resources>
