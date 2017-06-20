@@ -1,12 +1,13 @@
 package com.moumou.beachvolleyballweather.Weather
 
+import java.io.Serializable
 import java.lang.Math.pow
 
 data class Weather(val summary : String,
                    val temperature : Double,
                    val precipProb : Double,
                    val windSpeed : Double,
-                   val city : String) {
+                   val city : String) : Serializable{
 
     val weatherResult : Double
     val possible : Boolean

@@ -56,6 +56,9 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
                     this).addOnConnectionFailedListener(
                     this).addApi(LocationServices.API).build()
         }
+
+        weather = SharedPreferencesHandler.getWeather(context)
+
     }
 
     override fun onCreateView(inflater : LayoutInflater?,
@@ -342,6 +345,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
         setLocationLabel(weather.city)
         recyclerview_item_icon.setIconResource(iconResource)
         recyclerview_item_icon.setIconColor(iconColor)
+        SharedPreferencesHandler.storeWeather(context, weather)
     }
 
     fun createDialog(message : String) {
