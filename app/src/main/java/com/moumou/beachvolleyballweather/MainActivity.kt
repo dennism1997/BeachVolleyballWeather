@@ -21,11 +21,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //TODO remove when release
-//        if (DEBUG) {
-//            setLocale(this, "nl")
-//        }
-
         setContentView(R.layout.activity_main)
         toolbar.title = getString(R.string.app_name)
         setSupportActionBar(toolbar)
@@ -35,8 +30,8 @@ class MainActivity : AppCompatActivity() {
                                               arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                                               RC_LOCATION_PERMISSION)
         } else {
-            supportFragmentManager.beginTransaction().replace(R.id.main_content_frame,
-                                                              MainFragment()).commit()
+            val weatherPagerAdapter = WeatherPagerAdapter(supportFragmentManager)
+            viewPager.adapter = weatherPagerAdapter
         }
 
     }
@@ -79,15 +74,6 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
-    }
-
-    fun setLocale(context : Context, language : String) {
-        val locale = Locale(language)
-        Locale.setDefault(locale)
-        val config = Configuration()
-        config.setLocale(locale)
-        context.resources.updateConfiguration(config,
-                                              context.resources.displayMetrics)
     }
 
 }

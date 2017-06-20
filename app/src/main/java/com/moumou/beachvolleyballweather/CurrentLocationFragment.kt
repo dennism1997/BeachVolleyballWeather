@@ -26,12 +26,12 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
 import com.moumou.beachvolleyballweather.Weather.Weather
 import com.moumou.beachvolleyballweather.Weather.WeatherCalculator
-import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_current_location.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
-class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+class CurrentLocationFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private val RC_LOCATION_PERMISSION = 9001
 
@@ -65,7 +65,7 @@ class MainFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiC
                               container : ViewGroup?,
                               savedInstanceState : Bundle?) : View? {
         // Inflate the layout for this fragment
-        val view = inflater!!.inflate(R.layout.fragment_main, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_current_location, container, false)
 
         iconResource = getString(R.string.wi_na)
         return view
