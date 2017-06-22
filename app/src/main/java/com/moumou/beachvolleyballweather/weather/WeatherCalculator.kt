@@ -1,4 +1,4 @@
-package com.moumou.beachvolleyballweather.Weather
+package com.moumou.beachvolleyballweather.weather
 
 object WeatherCalculator{
 

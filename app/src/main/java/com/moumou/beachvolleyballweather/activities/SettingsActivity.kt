@@ -1,7 +1,9 @@
-package com.moumou.beachvolleyballweather
+package com.moumou.beachvolleyballweather.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.moumou.beachvolleyballweather.fragments.SettingsFragment
+import com.moumou.beachvolleyballweather.R
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {

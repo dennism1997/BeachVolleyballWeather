@@ -1,4 +1,4 @@
-package com.moumou.beachvolleyballweather
+package com.moumou.beachvolleyballweather.fragments
 
 import android.Manifest
 import android.graphics.Color
@@ -24,12 +24,14 @@ import com.github.kittinunf.result.Result
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
-import com.moumou.beachvolleyballweather.Weather.Weather
-import com.moumou.beachvolleyballweather.Weather.WeatherCalculator
-import kotlinx.android.synthetic.main.fragment_current_location.*
+import com.moumou.beachvolleyballweather.R
+import com.moumou.beachvolleyballweather.SharedPreferencesHandler
+import com.moumou.beachvolleyballweather.weather.Weather
+import com.moumou.beachvolleyballweather.weather.WeatherCalculator
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
+import kotlinx.android.synthetic.main.fragment_current_location.*
 
 class CurrentLocationFragment : Fragment(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -64,7 +66,7 @@ class CurrentLocationFragment : Fragment(), GoogleApiClient.ConnectionCallbacks,
     override fun onCreateView(inflater : LayoutInflater?,
                               container : ViewGroup?,
                               savedInstanceState : Bundle?) : View? {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragments
         val view = inflater!!.inflate(R.layout.fragment_current_location, container, false)
 
         iconResource = getString(R.string.wi_na)
@@ -108,11 +110,13 @@ class CurrentLocationFragment : Fragment(), GoogleApiClient.ConnectionCallbacks,
 
                     recyclerview_item_icon.startAnimation(fadeInAnimation)
                     if (weather.possible) {
-                        recyclerview_item_icon.setIconColor(ContextCompat.getColor(context,
-                                                                                   R.color.weather_possible))
+                        recyclerview_item_icon.setIconColor(
+                                ContextCompat.getColor(context,
+                                                       R.color.weather_possible))
                     } else {
-                        recyclerview_item_icon.setIconColor(ContextCompat.getColor(context,
-                                                                                   R.color.weather_not_possible))
+                        recyclerview_item_icon.setIconColor(
+                                ContextCompat.getColor(context,
+                                                       R.color.weather_not_possible))
                     }
                     switch = false
 

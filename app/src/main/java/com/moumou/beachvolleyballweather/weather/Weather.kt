@@ -1,4 +1,4 @@
-package com.moumou.beachvolleyballweather.Weather
+package com.moumou.beachvolleyballweather.weather
 
 import java.io.Serializable
 import java.lang.Math.pow

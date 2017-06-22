@@ -1,9 +1,11 @@
 package com.moumou.beachvolleyballweather
 
 import android.content.Context
+import android.location.Geocoder
 import android.support.v7.preference.PreferenceManager
 import com.google.gson.Gson
-import com.moumou.beachvolleyballweather.Weather.Weather
+import com.moumou.beachvolleyballweather.weather.Weather
+import java.util.*
 
 /**
  * Created by MouMou on 20-06-17.
@@ -30,5 +32,13 @@ object SharedPreferencesHandler {
         val w = Gson().fromJson(s, Weather::class.java)
 
         return w
+    }
+
+    @Synchronized
+    fun getCity(context : Context, lat : Double, long : Double) : String {
+        val gcd = Geocoder(context, Locale.getDefault())
+        val cities = gcd.getFromLocation(lat,
+                                         long, 1)
+        return cities[0].locality
     }
 }

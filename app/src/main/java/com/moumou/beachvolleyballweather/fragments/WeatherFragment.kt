@@ -1,4 +1,4 @@
-package com.moumou.beachvolleyballweather
+package com.moumou.beachvolleyballweather.fragments
 
 import android.graphics.Color
 import android.location.Geocoder
@@ -9,15 +9,20 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.preference.PreferenceManager
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
-import com.moumou.beachvolleyballweather.Weather.Weather
-import com.moumou.beachvolleyballweather.Weather.WeatherCalculator
+import com.moumou.beachvolleyballweather.R
+import com.moumou.beachvolleyballweather.SharedPreferencesHandler
+import com.moumou.beachvolleyballweather.weather.Weather
+import com.moumou.beachvolleyballweather.weather.WeatherCalculator
 import kotlinx.android.synthetic.main.fragment_weather.*
 import org.json.JSONException
 import org.json.JSONObject
-import java.util.Locale
+import java.util.*
 
 class WeatherFragment(val location : Location) : Fragment() {
 
@@ -27,9 +32,21 @@ class WeatherFragment(val location : Location) : Fragment() {
     var iconResource : String = ""
     var iconColor : Int = Color.BLACK
 
-    override fun onCreate(savedInstanceState : Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater : LayoutInflater?,
+                              container : ViewGroup?,
+                              savedInstanceState : Bundle?) : View? {
+        // Inflate the layout for this fragments
+        val view = inflater!!.inflate(R.layout.fragment_weather, container, false)
 
+        iconResource = getString(R.string.wi_na)
+        return view
+    }
+
+    override fun onViewCreated(view : View?, savedInstanceState : Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        getWeatherData()
+        swipeRefreshLayout.setOnRefreshListener { getWeatherData() }
     }
 
     fun getWeatherData() {
@@ -104,13 +121,11 @@ class WeatherFragment(val location : Location) : Fragment() {
             val windSpeed = data.getDouble("windSpeed")
             val summary = data.getString("summary")
 
-            val gcd = Geocoder(context, Locale.getDefault())
-            val cities = gcd.getFromLocation(location.latitude,
-                                             location.longitude, 1)
+            val city = SharedPreferencesHandler.getCity(context, location.latitude, location.longitude)
             //TODO do something with the city
-            Log.d("location", cities[0].locality)
+            Log.d("location", city)
 
-            weather = Weather(summary, temp, precip, windSpeed, cities[0].locality)
+            weather = Weather(summary, temp, precip, windSpeed, city)
             val iconType : String = data.getString("icon")
             when (iconType.trim()) {
                 "rain" -> {

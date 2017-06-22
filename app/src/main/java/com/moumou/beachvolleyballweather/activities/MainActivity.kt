@@ -1,9 +1,9 @@
-package com.moumou.beachvolleyballweather
+package com.moumou.beachvolleyballweather.activities
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Configuration
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -11,12 +11,16 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import com.google.android.gms.location.places.ui.PlacePicker
+import com.moumou.beachvolleyballweather.R
+import com.moumou.beachvolleyballweather.WeatherPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private val RC_LOCATION_PERMISSION = 9001
+    private var weatherPagerAdapter : WeatherPagerAdapter? = null
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +34,7 @@ class MainActivity : AppCompatActivity() {
                                               arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                                               RC_LOCATION_PERMISSION)
         } else {
-            val weatherPagerAdapter = WeatherPagerAdapter(supportFragmentManager)
+            weatherPagerAdapter = WeatherPagerAdapter(supportFragmentManager)
             viewPager.adapter = weatherPagerAdapter
         }
 
@@ -74,6 +78,26 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
+    }
+
+    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            val place = PlacePicker.getPlace(this, data)
+            val toastMsg = String.format("Place: %s", place.name)
+            Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show()
+            createWeatherFragment(place.latLng.latitude, place.latLng.longitude)
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+
+        }
+
+    }
+
+    fun createWeatherFragment(lat : Double, long : Double) {
+        val l = Location("")
+        l.latitude = lat
+        l.longitude = long
+        weatherPagerAdapter?.addLocation(l)
     }
 
 }
