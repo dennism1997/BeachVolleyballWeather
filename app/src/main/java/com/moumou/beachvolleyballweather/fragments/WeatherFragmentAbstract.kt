@@ -59,7 +59,7 @@ abstract class WeatherFragmentAbstract : Fragment() {
 
             override fun onAnimationEnd(animation : Animation?) {
                 if (switch) {
-                    recyclerview_item_icon.startAnimation(fadeOutAnimation)
+                    recyclerView_item_icon.startAnimation(fadeOutAnimation)
                 }
             }
 
@@ -74,13 +74,13 @@ abstract class WeatherFragmentAbstract : Fragment() {
             override fun onAnimationEnd(animation : Animation?) {
                 if (switch) {
 
-                    recyclerview_item_icon.startAnimation(fadeInAnimation)
+                    recyclerView_item_icon.startAnimation(fadeInAnimation)
                     if (weather.possible) {
-                        recyclerview_item_icon.setIconColor(
+                        recyclerView_item_icon.setIconColor(
                                 ContextCompat.getColor(context,
                                                        R.color.weather_possible))
                     } else {
-                        recyclerview_item_icon.setIconColor(
+                        recyclerView_item_icon.setIconColor(
                                 ContextCompat.getColor(context,
                                                        R.color.weather_not_possible))
                     }
@@ -93,10 +93,10 @@ abstract class WeatherFragmentAbstract : Fragment() {
             }
         })
 
-        recyclerview_item_icon.addTextChangedListener(object : TextWatcher {
+        recyclerView_item_icon.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s : Editable?) {
                 switch = true
-                recyclerview_item_icon.startAnimation(fadeInAnimation)
+                recyclerView_item_icon.startAnimation(fadeInAnimation)
             }
 
             override fun beforeTextChanged(s : CharSequence?,
@@ -254,9 +254,8 @@ abstract class WeatherFragmentAbstract : Fragment() {
         setPrecip(weather.precipProb)
         setWindspeed(weather.windSpeed)
         setLocationLabel(weather.city)
-        recyclerview_item_icon.setIconResource(iconResource)
-        recyclerview_item_icon.setIconColor(iconColor)
-        SharedPreferencesHandler.storeWeather(context, weather)
+        recyclerView_item_icon.setIconResource(iconResource)
+        recyclerView_item_icon.setIconColor(iconColor)
     }
 
     fun createDialog(message : String) {

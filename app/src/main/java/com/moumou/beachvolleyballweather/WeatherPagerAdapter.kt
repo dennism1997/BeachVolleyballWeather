@@ -9,9 +9,6 @@ import com.moumou.beachvolleyballweather.fragments.CurrentLocationFragment
 import com.moumou.beachvolleyballweather.fragments.EmptyFragment
 import com.moumou.beachvolleyballweather.fragments.WeatherFragment
 
-/**
- * Created by MouMou on 20-06-17.
- */
 class WeatherPagerAdapter(fm : FragmentManager?) : FragmentStatePagerAdapter(fm) {
 
     private var locations : ArrayList<Location> = ArrayList()

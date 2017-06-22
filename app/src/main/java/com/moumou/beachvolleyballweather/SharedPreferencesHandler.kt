@@ -7,14 +7,10 @@ import com.google.gson.Gson
 import com.moumou.beachvolleyballweather.weather.Weather
 import java.util.*
 
-/**
- * Created by MouMou on 20-06-17.
- */
-
 object SharedPreferencesHandler {
     val KEY_WEATHER = "WEATHER"
 
-    fun storeWeather(c : Context, w : Weather) {
+    fun storeLocations(c : Context, w : Weather) {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(c)
         val editor = sharedPref.edit()
 
@@ -22,7 +18,7 @@ object SharedPreferencesHandler {
         editor.apply()
     }
 
-    fun getWeather(c : Context) : Weather {
+    fun getLocations(c : Context) : Weather {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(c)
         val s = sharedPref.getString(KEY_WEATHER, "")
 

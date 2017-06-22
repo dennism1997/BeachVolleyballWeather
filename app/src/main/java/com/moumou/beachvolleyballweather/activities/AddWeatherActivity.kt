@@ -2,16 +2,11 @@ package com.moumou.beachvolleyballweather.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.google.android.gms.location.places.ui.PlacePicker
 import com.moumou.beachvolleyballweather.Constants
 
-/**
- * Created by MouMou on 22-06-17.
- */
 class AddWeatherActivity : AppCompatActivity() {
 
     val PLACE_PICKER_RC = 1
