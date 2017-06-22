@@ -37,5 +37,6 @@
     <string name="mailto">mailto:</string>
     <string name="mail_body"><![CDATA[\?subject= Request BeachvolleyballWeather feature&body=I would like to request the following feature: ]]></string>
     <string name="settings_nice_weather_key">nice_weather</string>
+    <string name="storage_parsing_error">Could not parse storage</string>
 
 </resources>
