@@ -2,32 +2,35 @@ package com.moumou.beachvolleyballweather
 
 import android.content.Context
 import android.location.Geocoder
+import android.location.Location
 import android.support.v7.preference.PreferenceManager
 import com.google.gson.Gson
-import com.moumou.beachvolleyballweather.weather.Weather
-import java.util.*
+import com.google.gson.reflect.TypeToken
+import java.util.Locale
+import kotlin.collections.ArrayList
 
 object SharedPreferencesHandler {
-    val KEY_WEATHER = "WEATHER"
+    val KEY_WEATHER_LOCATIONS = "LOCATIONS"
 
-    fun storeLocations(c : Context, w : Weather) {
+    fun storeLocations(c : Context, l : ArrayList<Location>) {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(c)
         val editor = sharedPref.edit()
 
-        editor.putString(KEY_WEATHER, Gson().toJson(w))
+        editor.putString(KEY_WEATHER_LOCATIONS, Gson().toJson(l))
         editor.apply()
     }
 
-    fun getLocations(c : Context) : Weather {
+    fun getLocations(c : Context) : ArrayList<Location> {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(c)
-        val s = sharedPref.getString(KEY_WEATHER, "")
+        val s = sharedPref.getString(KEY_WEATHER_LOCATIONS, "")
 
         if(s == ""){
-            return Weather("dummy", 0.0, 0.0, 0.0, "Silicon Valley")
+            return ArrayList()
         }
-        val w = Gson().fromJson(s, Weather::class.java)
+        val type = object : TypeToken<ArrayList<Location>>() {}.type
+        val list = Gson().fromJson<ArrayList<Location>>(s, type)
 
-        return w
+        return list
     }
 
     @Synchronized
