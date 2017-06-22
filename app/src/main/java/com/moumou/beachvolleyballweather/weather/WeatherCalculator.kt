@@ -12,6 +12,13 @@ object WeatherCalculator{
             _threshold = value
         }
 
+    private var _metric : Boolean = true
+    var metric : Boolean
+        get() = _metric
+        set(value) {
+            _metric = value
+        }
+
     fun setThreshold(niceWeatherOnly : Boolean) {
         if(niceWeatherOnly){
             _threshold = highThreshold

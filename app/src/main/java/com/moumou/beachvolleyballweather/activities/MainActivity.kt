@@ -9,12 +9,14 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.google.android.gms.location.places.ui.PlacePicker
 import com.moumou.beachvolleyballweather.R
 import com.moumou.beachvolleyballweather.WeatherPagerAdapter
+import com.moumou.beachvolleyballweather.weather.WeatherCalculator
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -36,8 +38,10 @@ class MainActivity : AppCompatActivity() {
         } else {
             weatherPagerAdapter = WeatherPagerAdapter(supportFragmentManager)
             viewPager.adapter = weatherPagerAdapter
+            viewPager.offscreenPageLimit = 3
         }
 
+        getSettings()
     }
 
     override fun onCreateOptionsMenu(menu : Menu?) : Boolean {
@@ -100,4 +104,13 @@ class MainActivity : AppCompatActivity() {
         weatherPagerAdapter?.addLocation(l)
     }
 
+    fun getSettings() {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+        WeatherCalculator.metric = sharedPref.getBoolean(getString(R.string.settings_metric_key),
+                                                         true)
+        val niceWeatherOnly = sharedPref.getBoolean(getString(R.string.settings_nice_weather_key),
+                                                    false)
+        WeatherCalculator.setThreshold(niceWeatherOnly)
+
+    }
 }

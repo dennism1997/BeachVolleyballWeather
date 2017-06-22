@@ -4,6 +4,7 @@ import android.location.Location
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.view.PagerAdapter
 import com.moumou.beachvolleyballweather.fragments.CurrentLocationFragment
 import com.moumou.beachvolleyballweather.fragments.EmptyFragment
 import com.moumou.beachvolleyballweather.fragments.WeatherFragment
@@ -26,12 +27,12 @@ class WeatherPagerAdapter(fm : FragmentManager?) : FragmentStatePagerAdapter(fm)
         return WeatherFragment(locations[item - 1])
     }
 
-    override fun getItemPosition(`object` : Any?) : Int {
-        return super.getItemPosition(`object`)
-    }
-
     override fun getCount() : Int {
         return locations.size + 2
+    }
+
+    override fun getItemPosition(`object` : Any?) : Int {
+        return PagerAdapter.POSITION_NONE
     }
 
     fun addLocation(l : Location) {
