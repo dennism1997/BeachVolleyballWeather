@@ -23,7 +23,6 @@ class WeatherPagerAdapter(fm : FragmentManager?) : FragmentStatePagerAdapter(fm)
         if (item == 0) {
             return CurrentLocationFragment()
         } else if (item == count - 1) {
-            //TODO return a fragments here that lets you add a new location
             return EmptyFragment()
         }
 
@@ -47,5 +46,9 @@ class WeatherPagerAdapter(fm : FragmentManager?) : FragmentStatePagerAdapter(fm)
         }
 
         SharedPreferencesHandler.storeLocations(c, locations)
+    }
+
+    fun removeLocation(i : Int) {
+        locations.removeAt(i)
     }
 }

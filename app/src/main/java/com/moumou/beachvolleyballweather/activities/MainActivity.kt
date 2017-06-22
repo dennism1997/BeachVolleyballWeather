@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -56,16 +55,18 @@ class MainActivity : AppCompatActivity() {
             R.id.settings_action -> {
                 val i = Intent(this, SettingsActivity().javaClass)
                 startActivity(i)
+                return true
             }
-            R.id.request_feature_action -> {
-                val emailIntent = Intent(Intent.ACTION_SENDTO)
-                emailIntent.data = (Uri.parse(getString(R.string.mailto) + getString(R.string.email) + getString(
-                        R.string.mail_body)))
-
-                startActivity(Intent.createChooser(emailIntent, "Send mail..."))
+            R.id.about_action -> {
+                showAboutScreen()
+                return true
             }
+            else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showAboutScreen() {
+        startActivity(Intent(this, AboutActivity().javaClass))
     }
 
     override fun onRequestPermissionsResult(requestCode : Int,

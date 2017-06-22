@@ -17,5 +17,15 @@
     <string name="locationLabel">Locatie: %1$s </string>
     <string name="storage_parsing_error">Fout in opslag</string>
     <string name="about">Over mij</string>
+    <string name="version">Version</string>
+    <string name="author">Author</string>
+    <string name="support_development">Support development</string>
+    <string name="report_bug">Report bugs</string>
+    <string name="report_bug_subtext">Report bugs or request new features</string>
+    <string name="rate_app">Rate the app</string>
+    <string name="send_mail_action">Send mail...</string>
+    <string name="share_app_action_text">\\nLet me recommend you this application\\n\\n</string>
+    <string name="share">Share</string>
+    <string name="share_app">Share the app</string>
 
 </resources>
