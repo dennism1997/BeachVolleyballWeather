@@ -1,30 +1,31 @@
-package com.moumou.beachvolleyballweather
+package com.moumou.beachvolleyballweather.activities
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Configuration
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import com.google.android.gms.location.places.ui.PlacePicker
+import com.moumou.beachvolleyballweather.R
+import com.moumou.beachvolleyballweather.WeatherPagerAdapter
+import com.moumou.beachvolleyballweather.weather.WeatherCalculator
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private val RC_LOCATION_PERMISSION = 9001
+    private var weatherPagerAdapter : WeatherPagerAdapter? = null
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //TODO remove when release
-//        if (DEBUG) {
-//            setLocale(this, "nl")
-//        }
 
         setContentView(R.layout.activity_main)
         toolbar.title = getString(R.string.app_name)
@@ -35,10 +36,12 @@ class MainActivity : AppCompatActivity() {
                                               arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                                               RC_LOCATION_PERMISSION)
         } else {
-            supportFragmentManager.beginTransaction().replace(R.id.main_content_frame,
-                                                              MainFragment()).commit()
+            weatherPagerAdapter = WeatherPagerAdapter(supportFragmentManager)
+            viewPager.adapter = weatherPagerAdapter
+            viewPager.offscreenPageLimit = 3
         }
 
+        getSettings()
     }
 
     override fun onCreateOptionsMenu(menu : Menu?) : Boolean {
@@ -81,13 +84,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun setLocale(context : Context, language : String) {
-        val locale = Locale(language)
-        Locale.setDefault(locale)
-        val config = Configuration()
-        config.setLocale(locale)
-        context.resources.updateConfiguration(config,
-                                              context.resources.displayMetrics)
+    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            val place = PlacePicker.getPlace(this, data)
+            val toastMsg = String.format("Place: %s", place.name)
+            Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show()
+            createWeatherFragment(place.latLng.latitude, place.latLng.longitude)
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+
+        }
+
     }
 
+    fun createWeatherFragment(lat : Double, long : Double) {
+        val l = Location("")
+        l.latitude = lat
+        l.longitude = long
+        weatherPagerAdapter?.addLocation(l)
+    }
+
+    fun getSettings() {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+        WeatherCalculator.metric = sharedPref.getBoolean(getString(R.string.settings_metric_key),
+                                                         true)
+        val niceWeatherOnly = sharedPref.getBoolean(getString(R.string.settings_nice_weather_key),
+                                                    false)
+        WeatherCalculator.setThreshold(niceWeatherOnly)
+
+    }
 }

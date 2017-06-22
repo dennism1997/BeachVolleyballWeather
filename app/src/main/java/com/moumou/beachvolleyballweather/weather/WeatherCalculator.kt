@@ -1,4 +1,4 @@
-package com.moumou.beachvolleyballweather.Weather
+package com.moumou.beachvolleyballweather.weather
 
 object WeatherCalculator{
 
@@ -10,6 +10,13 @@ object WeatherCalculator{
         get() = _threshold
         set(value) {
             _threshold = value
+        }
+
+    private var _metric : Boolean = true
+    var metric : Boolean
+        get() = _metric
+        set(value) {
+            _metric = value
         }
 
     fun setThreshold(niceWeatherOnly : Boolean) {

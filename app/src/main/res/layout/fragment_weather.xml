@@ -20,7 +20,7 @@
             android:layout_weight="4">
 
             <com.github.pwittchen.weathericonview.WeatherIconView
-                android:id="@+id/recyclerview_item_icon"
+                android:id="@+id/recyclerView_item_icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="0dp"
@@ -71,12 +71,12 @@
                     android:id="@+id/summaryTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="@dimen/label_text_size"
-                    android:scrollHorizontally="true"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:ellipsize="marquee"
-                    android:singleLine="true"
                     />
             </LinearLayout>
         </RelativeLayout>
@@ -113,9 +113,9 @@
                     android:id="@+id/temperatureTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="@string/temperatureLabel"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="@dimen/label_text_size"
+                    tools:text="@string/temperatureLabel"
                     />
             </LinearLayout>
         </RelativeLayout>
@@ -152,9 +152,9 @@
                     android:id="@+id/precipTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="@string/precipLabel"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="@dimen/label_text_size"
+                    tools:text="@string/precipLabel"
                     />
             </LinearLayout>
         </RelativeLayout>
@@ -190,9 +190,9 @@
                     android:id="@+id/windTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="@string/windspeedLabel"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="@dimen/label_text_size"
+                    tools:text="@string/windspeedLabel"
                     />
             </LinearLayout>
         </RelativeLayout>

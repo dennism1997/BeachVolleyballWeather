@@ -1,4 +1,4 @@
-package com.moumou.beachvolleyballweather
+package com.moumou.beachvolleyballweather.activities
 
 import android.content.Intent
 import android.os.Bundle

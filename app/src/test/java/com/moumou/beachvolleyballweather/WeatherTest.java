@@ -2,7 +2,7 @@ package com.moumou.beachvolleyballweather;
 
 import android.support.annotation.NonNull;
 
-import com.moumou.beachvolleyballweather.Weather.Weather;
+import com.moumou.beachvolleyballweather.weather.Weather;
 
 import junit.framework.Assert;
 
