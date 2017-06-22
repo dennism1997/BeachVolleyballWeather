@@ -13,4 +13,9 @@
         android:title="@string/request_feature"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/about_action"
+        android:title="@string/about"
+        app:showAsAction="never"
+        />
 </menu>

@@ -16,5 +16,6 @@
     <string name="request_feature">Vraag feature aan</string>
     <string name="locationLabel">Locatie: %1$s </string>
     <string name="storage_parsing_error">Fout in opslag</string>
+    <string name="about">Over mij</string>
 
 </resources>
