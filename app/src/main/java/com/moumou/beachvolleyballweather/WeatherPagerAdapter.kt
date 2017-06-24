@@ -1,7 +1,6 @@
 package com.moumou.beachvolleyballweather
 
 import android.content.Context
-import android.location.Location
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
@@ -9,11 +8,12 @@ import android.support.v4.view.PagerAdapter
 import com.moumou.beachvolleyballweather.fragments.CurrentLocationFragment
 import com.moumou.beachvolleyballweather.fragments.EmptyFragment
 import com.moumou.beachvolleyballweather.fragments.WeatherFragment
+import com.moumou.beachvolleyballweather.weather.WeatherLocation
 
 class WeatherPagerAdapter(fm : FragmentManager?) : FragmentStatePagerAdapter(fm) {
+    private var _locations : ArrayList<WeatherLocation> = ArrayList()
 
-    private var _locations : ArrayList<Location> = ArrayList()
-    var locations : ArrayList<Location>
+    var locations : ArrayList<WeatherLocation>
         get() = _locations
         set(value) {
             _locations = value
@@ -37,7 +37,7 @@ class WeatherPagerAdapter(fm : FragmentManager?) : FragmentStatePagerAdapter(fm)
         return PagerAdapter.POSITION_NONE
     }
 
-    fun addLocation(c : Context, l : Location) {
+    fun addLocation(c : Context, l : WeatherLocation) {
         if (count == 0) {
             locations.add(l)
         } else {
@@ -51,4 +51,5 @@ class WeatherPagerAdapter(fm : FragmentManager?) : FragmentStatePagerAdapter(fm)
     fun removeLocation(i : Int) {
         locations.removeAt(i)
     }
+
 }

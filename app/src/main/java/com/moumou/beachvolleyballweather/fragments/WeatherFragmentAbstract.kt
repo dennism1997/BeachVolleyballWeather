@@ -1,7 +1,6 @@
 package com.moumou.beachvolleyballweather.fragments
 
 import android.graphics.Color
-import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -18,9 +17,9 @@ import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
 import com.moumou.beachvolleyballweather.R
-import com.moumou.beachvolleyballweather.SharedPreferencesHandler
 import com.moumou.beachvolleyballweather.weather.Weather
 import com.moumou.beachvolleyballweather.weather.WeatherCalculator
+import com.moumou.beachvolleyballweather.weather.WeatherLocation
 import kotlinx.android.synthetic.main.fragment_weather.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -29,8 +28,8 @@ abstract class WeatherFragmentAbstract : Fragment() {
 
     private var metric : Boolean = true
 
-    var location : Location = Location("dummy")
-    var weather : Weather = Weather("dummy", 0.0, 0.0, 0.0, "Silicon Valley")
+    var location : WeatherLocation = WeatherLocation(0.0, 0.0, "Silicon Valley")
+    var weather : Weather = Weather("dummy", 0.0, 0.0, 0.0)
     var iconResource : String = ""
     var iconColor : Int = Color.BLACK
     var switch : Boolean = true
@@ -152,25 +151,23 @@ abstract class WeatherFragmentAbstract : Fragment() {
     }
 
     fun getWeatherData() {
-        if (location.latitude != 0.0) {
-            val url = getString(R.string.weatherUrl) +
-                    location.latitude + "," + location.longitude +
-                    getString(R.string.query_celsius) + getString(R.string.lang_query) +
-                    getString(R.string.weather_lang)
-            url.httpGet().responseJson { _, _, result ->
-                print(result.toString())
-                when (result) {
-                    is Result.Success -> {
-                        val json : JSONObject = result.get().obj()
-                        parseResponse(json)
-                        swipeRefreshLayout.isRefreshing = false
+        val url = getString(R.string.weatherUrl) +
+                location.latitude + "," + location.longitude +
+                getString(R.string.query_celsius) + getString(R.string.lang_query) +
+                getString(R.string.weather_lang)
+        url.httpGet().responseJson { _, _, result ->
+            print(result.toString())
+            when (result) {
+                is Result.Success -> {
+                    val json : JSONObject = result.get().obj()
+                    parseResponse(json)
+                    swipeRefreshLayout.isRefreshing = false
 
-                    }
-                    is Result.Failure -> {
-                        result.getException().printStackTrace()
-                        createDialog(result.error.localizedMessage)
-                        swipeRefreshLayout.isRefreshing = false
-                    }
+                }
+                is Result.Failure -> {
+                    result.getException().printStackTrace()
+                    createDialog(result.error.localizedMessage)
+                    swipeRefreshLayout.isRefreshing = false
                 }
             }
 
@@ -185,13 +182,7 @@ abstract class WeatherFragmentAbstract : Fragment() {
             val windSpeed = data.getDouble("windSpeed")
             val summary = data.getString("summary")
 
-            val city = SharedPreferencesHandler.getCity(activity,
-                                                        location.latitude,
-                                                        location.longitude)
-
-            Log.d("location", city)
-
-            weather = Weather(summary, temp, precip, windSpeed, city)
+            weather = Weather(summary, temp, precip, windSpeed)
             val iconType : String = data.getString("icon")
             when (iconType.trim()) {
                 "rain" -> {
@@ -253,7 +244,7 @@ abstract class WeatherFragmentAbstract : Fragment() {
         setSummary(weather.summary)
         setPrecip(weather.precipProb)
         setWindspeed(weather.windSpeed)
-        setLocationLabel(weather.city)
+        setLocationLabel(location.city)
         weatherIconView.setIconResource(iconResource)
         weatherIconView.setIconColor(iconColor)
     }

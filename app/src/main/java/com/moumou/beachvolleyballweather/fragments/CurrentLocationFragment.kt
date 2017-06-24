@@ -1,6 +1,7 @@
 package com.moumou.beachvolleyballweather.fragments
 
 import android.Manifest
+import android.location.Geocoder
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.view.View
@@ -8,7 +9,9 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
 import com.moumou.beachvolleyballweather.R
+import com.moumou.beachvolleyballweather.weather.WeatherLocation
 import kotlinx.android.synthetic.main.fragment_weather.*
+import java.util.*
 
 class CurrentLocationFragment : WeatherFragmentAbstract(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -48,8 +51,10 @@ class CurrentLocationFragment : WeatherFragmentAbstract(), GoogleApiClient.Conne
 
     override fun onConnected(p0 : Bundle?) {
         try {
-            location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient)
-            if (location.latitude != 0.0) {
+            val loc = LocationServices.FusedLocationApi.getLastLocation(googleApiClient)
+            if (loc != null) {
+                val city = getCity(loc.latitude, loc.longitude)
+                location = WeatherLocation(loc.latitude, loc.longitude, city)
                 getWeatherData()
             } else {
                 createDialog(R.string.no_location)
@@ -74,6 +79,10 @@ class CurrentLocationFragment : WeatherFragmentAbstract(), GoogleApiClient.Conne
         googleApiClient?.connect()
     }
 
-
-
+    fun getCity(lat : Double, long : Double) : String {
+        val gcd = Geocoder(context, Locale.getDefault())
+        val cities = gcd.getFromLocation(lat,
+                                         long, 1)
+        return cities[0].locality
+    }
 }

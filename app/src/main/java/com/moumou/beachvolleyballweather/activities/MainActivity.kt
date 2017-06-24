@@ -3,7 +3,7 @@ package com.moumou.beachvolleyballweather.activities
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
+import android.location.Geocoder
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -11,13 +11,14 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.google.android.gms.location.places.ui.PlacePicker
 import com.moumou.beachvolleyballweather.R
 import com.moumou.beachvolleyballweather.SharedPreferencesHandler
 import com.moumou.beachvolleyballweather.WeatherPagerAdapter
 import com.moumou.beachvolleyballweather.weather.WeatherCalculator
+import com.moumou.beachvolleyballweather.weather.WeatherLocation
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -89,10 +90,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
         if (resultCode == Activity.RESULT_OK) {
-            val place = PlacePicker.getPlace(this, data)
-            val toastMsg = String.format("Place: %s", place.name)
-            Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show()
-            createWeatherFragment(place.latLng.latitude, place.latLng.longitude)
+            val place = PlacePicker.getPlace(this, data).latLng
+            val city = getCity(place.latitude, place.longitude)
+            createWeatherFragment(place.latitude, place.longitude, city)
         } else {
             super.onActivityResult(requestCode, resultCode, data)
 
@@ -100,10 +100,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun createWeatherFragment(lat : Double, long : Double) {
-        val l = Location("")
-        l.latitude = lat
-        l.longitude = long
+    fun createWeatherFragment(lat : Double, long : Double, city : String) {
+        val l = WeatherLocation(lat, long, city)
         weatherPagerAdapter.addLocation(this, l)
     }
 
@@ -115,4 +113,12 @@ class MainActivity : AppCompatActivity() {
                                                     false)
         WeatherCalculator.setThreshold(niceWeatherOnly)
     }
+
+    fun getCity(lat : Double, long : Double) : String {
+        val gcd = Geocoder(this, Locale.getDefault())
+        val cities = gcd.getFromLocation(lat,
+                                         long, 1)
+        return cities[0].locality
+    }
+
 }

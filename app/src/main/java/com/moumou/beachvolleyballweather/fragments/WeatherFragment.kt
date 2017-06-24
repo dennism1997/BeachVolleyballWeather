@@ -1,14 +1,14 @@
 package com.moumou.beachvolleyballweather.fragments
 
-import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.moumou.beachvolleyballweather.R
+import com.moumou.beachvolleyballweather.weather.WeatherLocation
 import kotlinx.android.synthetic.main.fragment_weather.*
 
-class WeatherFragment(l : Location) : WeatherFragmentAbstract() {
+class WeatherFragment(l : WeatherLocation) : WeatherFragmentAbstract() {
 
     init {
         location = l

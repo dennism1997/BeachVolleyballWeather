@@ -6,8 +6,7 @@ import java.lang.Math.pow
 data class Weather(val summary : String,
                    val temperature : Double,
                    val precipProb : Double,
-                   val windSpeed : Double,
-                   val city : String) : Serializable{
+                   val windSpeed : Double) : Serializable {
 
     val weatherResult : Double
     val possible : Boolean
