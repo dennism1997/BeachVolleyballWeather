@@ -18,7 +18,7 @@ import com.moumou.beachvolleyballweather.WeatherPagerAdapter
 import com.moumou.beachvolleyballweather.weather.WeatherCalculator
 import com.moumou.beachvolleyballweather.weather.WeatherLocation
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
